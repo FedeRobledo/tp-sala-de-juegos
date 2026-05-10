@@ -11,6 +11,11 @@
   color: #1e3a8a;
 }
 
+.intro {
+  margin-bottom: 1.25rem;
+  color: #475569;
+}
+
 .form-layout {
   display: flex;
   flex-direction: column;
@@ -47,4 +52,10 @@ button:hover {
 .note {
   margin-top: 1rem;
   color: #475569;
+}
+
+.note a {
+  color: #1e3a8a;
+  font-weight: 600;
+  text-decoration: none;
 }
