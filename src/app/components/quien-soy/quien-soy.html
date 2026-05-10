@@ -1,44 +1,28 @@
-<section class="page-card">
-  <h2>Quién soy</h2>
+<div class="game-section">
+  <h3>Juego propio: Sonido o Símbolo</h3>
 
-  @if (loading()) {
-    <p>Cargando datos desde GitHub...</p>
-  }
+  <p>
+    Mi juego propio se llamará <strong>Sonido o Símbolo</strong>. La idea del juego es
+    reconocer elementos relacionados con Argentina a partir de un sonido o de una imagen
+    parcialmente oculta. En cada ronda el jugador tendrá que elegir la opción correcta
+    entre varias respuestas posibles.
+  </p>
 
-  @if (error()) {
-    <p>No se pudieron cargar los datos del perfil. Intente nuevamente más tarde.</p>
-  }
+  <p>
+    El juego va a tener <strong>5 rondas</strong>. En cada una primero se escuchará un sonido.
+    Si el jugador reconoce el elemento solo con eso y responde bien, va a obtener más puntos.
+    Si no está seguro, podrá usar ayudas, como ver una imagen o símbolo relacionado, pero en
+    ese caso el puntaje será menor.
+  </p>
 
-  @if (user(); as githubUser) {
-    <div class="profile-layout">
-      <img [src]="githubUser.avatar_url" [alt]="githubUser.login" class="avatar" />
+  <p>
+    La temática general del juego estará centrada en elementos argentinos, por ejemplo sonidos,
+    objetos, símbolos, costumbres o referencias culturales del país. De esa forma el juego
+    propio mantiene la misma identidad que el resto de la sala.
+  </p>
 
-      <div class="profile-info">
-        <h3>{{ githubUser.name || githubUser.login }}</h3>
-        <p><strong>Usuario:</strong> {{ githubUser.login }}</p>
-        <p><strong>Ubicación:</strong> {{ githubUser.location || 'No informada' }}</p>
-        <p><strong>Repos públicos:</strong> {{ githubUser.public_repos }}</p>
-        <p><strong>Seguidores:</strong> {{ githubUser.followers }}</p>
-        <p><strong>Siguiendo:</strong> {{ githubUser.following }}</p>
-        <p>
-          <strong>Perfil:</strong>
-          <a [href]="githubUser.html_url" target="_blank" rel="noopener noreferrer">Ver GitHub</a>
-        </p>
-
-        <p class="bio">
-          {{ githubUser.bio || 'Este perfil no tiene una biografía cargada.' }}
-        </p>
-      </div>
-    </div>
-  }
-
-  <div class="game-section">
-    <h3>Juego propio</h3>
-    <p>
-      En esta sección se explicará el juego propio elegido para la Sala de Juegos.
-    </p>
-    <p>
-      En este Sprint 1 queda presentada la idea general y más adelante se completará su lógica.
-    </p>
-  </div>
-</section>
+  <p>
+    El desempeño del jugador se podrá medir mediante el puntaje total, la cantidad de aciertos,
+    las ayudas utilizadas y el tiempo total de la partida.
+  </p>
+</div>
