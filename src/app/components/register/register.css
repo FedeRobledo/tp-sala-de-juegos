@@ -1,0 +1,50 @@
+.page-card {
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  max-width: 620px;
+}
+
+.page-card h2 {
+  margin-top: 0;
+  color: #1e3a8a;
+}
+
+.form-layout {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+input {
+  padding: 0.7rem 0.9rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  font-size: 1rem;
+}
+
+button {
+  padding: 0.8rem 1rem;
+  border: none;
+  border-radius: 8px;
+  background-color: #1e3a8a;
+  color: #ffffff;
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+button:hover {
+  background-color: #163172;
+}
+
+.note {
+  margin-top: 1rem;
+  color: #475569;
+}

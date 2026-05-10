@@ -1,1 +1,44 @@
-<p>quien-soy works!</p>
+<section class="page-card">
+  <h2>Quién soy</h2>
+
+  @if (loading()) {
+    <p>Cargando datos desde GitHub...</p>
+  }
+
+  @if (error()) {
+    <p>No se pudieron cargar los datos del perfil. Intente nuevamente más tarde.</p>
+  }
+
+  @if (user(); as githubUser) {
+    <div class="profile-layout">
+      <img [src]="githubUser.avatar_url" [alt]="githubUser.login" class="avatar" />
+
+      <div class="profile-info">
+        <h3>{{ githubUser.name || githubUser.login }}</h3>
+        <p><strong>Usuario:</strong> {{ githubUser.login }}</p>
+        <p><strong>Ubicación:</strong> {{ githubUser.location || 'No informada' }}</p>
+        <p><strong>Repos públicos:</strong> {{ githubUser.public_repos }}</p>
+        <p><strong>Seguidores:</strong> {{ githubUser.followers }}</p>
+        <p><strong>Siguiendo:</strong> {{ githubUser.following }}</p>
+        <p>
+          <strong>Perfil:</strong>
+          <a [href]="githubUser.html_url" target="_blank" rel="noopener noreferrer">Ver GitHub</a>
+        </p>
+
+        <p class="bio">
+          {{ githubUser.bio || 'Este perfil no tiene una biografía cargada.' }}
+        </p>
+      </div>
+    </div>
+  }
+
+  <div class="game-section">
+    <h3>Juego propio</h3>
+    <p>
+      En esta sección se explicará el juego propio elegido para la Sala de Juegos.
+    </p>
+    <p>
+      En este Sprint 1 queda presentada la idea general y más adelante se completará su lógica.
+    </p>
+  </div>
+</section>
