@@ -1,14 +1,52 @@
-<section class="page-card">
-  <h2>Bienvenido a la Sala de Juegos</h2>
+<section class="hero-card">
+  <div class="hero-copy">
+    <p class="eyebrow">Sprint 2 · Autenticación y navegación</p>
 
-  <p>
-    La idea de esta sala de juegos es que todos los minijuegos compartan una misma temática:
-    Argentina. Por eso tanto la estética como el contenido de los juegos van a estar relacionados
-    con símbolos, costumbres, cultura, sonidos, palabras y referencias del país.
-  </p>
+    <h2>Bienvenido a la Sala de Juegos</h2>
 
-  <p>
-    En los próximos sprints se incorporarán los juegos principales, la autenticación de usuarios,
-    la sala de chat y los listados de resultados.
-  </p>
+    <p class="hero-text">
+      Una experiencia de minijuegos con identidad argentina, estética gaming moderna
+      y progreso guardado para cada jugador.
+    </p>
+
+    <div class="hero-actions">
+      <a routerLink="/login" class="btn primary">Iniciar sesión</a>
+      <a routerLink="/register" class="btn secondary">Crear cuenta</a>
+    </div>
+  </div>
+
+  <div class="hero-panel">
+    <span class="panel-icon">🎮</span>
+    <strong>Modo jugador</strong>
+    <p>
+      En este sprint vamos a conectar la autenticación real para que cada usuario
+      pueda ingresar, jugar y luego guardar sus resultados.
+    </p>
+  </div>
+</section>
+
+<section class="games-grid">
+  <article class="game-card">
+    <span>🧠</span>
+    <h3>Ahorcado</h3>
+    <p>Próximamente: adiviná palabras usando botones del abecedario.</p>
+  </article>
+
+  <article class="game-card">
+    <span>🃏</span>
+    <h3>Mayor o Menor</h3>
+    <p>Próximamente: poné a prueba tu intuición con cartas.</p>
+  </article>
+
+  <article class="game-card">
+    <span>❓</span>
+    <h3>Preguntados</h3>
+    <p>Próximamente: respondé preguntas y sumá puntos.</p>
+  </article>
+
+  <article class="game-card featured">
+    <span>🇦🇷</span>
+    <h3>Sonido o Símbolo</h3>
+    <p>Juego propio con sonidos, símbolos y referencias argentinas.</p>
+  </article>
 </section>
