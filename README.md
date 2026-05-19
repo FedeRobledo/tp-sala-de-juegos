@@ -1,59 +1,51 @@
-# SalaDeJuegos
+# Sala de Juegos - Programación IV UTN
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 21.2.10.
+Alumno: Federico Robledo  
+Materia: Programación IV  
+Trabajo práctico: Sala de Juegos  
+Sprint actual: Sprint #1
 
-## Development server
+## Descripción
 
-To start a local development server, run:
+Aplicación frontend desarrollada en Angular para el Trabajo Práctico #1 de Programación IV.
+
+La aplicación cuenta con navegación entre pantallas, componentes principales y una página de presentación del alumno conectada a la API pública de GitHub.
+
+## Funcionalidades del Sprint #1
+
+- Creación del proyecto Angular.
+- Deploy en hosting.
+- Componentes creados:
+  - Login
+  - Registro
+  - Home / Bienvenida
+  - Quién Soy
+- Navegación entre componentes.
+- Página Quién Soy conectada a la API pública de GitHub.
+- Imagen de perfil y datos del alumno desde GitHub.
+- Explicación del juego propio.
+- Favicon personalizado.
+
+## Juego propio
+
+El juego propio se llama **Sonido o Símbolo**.
+
+La idea es reconocer elementos relacionados con Argentina a partir de sonidos o imágenes parcialmente ocultas. El jugador deberá elegir la opción correcta entre varias respuestas posibles.
+
+El desempeño se medirá mediante puntaje total, cantidad de aciertos, ayudas utilizadas y tiempo total de partida.
+
+## Tecnologías utilizadas
+
+- Angular
+- TypeScript
+- HTML
+- CSS
+- GitHub API
+- Vercel
+
+## Comandos principales
+
+Instalar dependencias:
 
 ```bash
-ng serve
-```
-
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
-
-## Code scaffolding
-
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
-
-```bash
-ng generate --help
-```
-
-## Building
-
-To build the project run:
-
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Vitest](https://vitest.dev/) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+npm install

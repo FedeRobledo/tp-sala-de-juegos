@@ -1,28 +1,70 @@
-<div class="game-section">
-  <h3>Juego propio: Sonido o Símbolo</h3>
+<section class="page-card">
+  <h2>Quién soy</h2>
 
-  <p>
-    Mi juego propio se llamará <strong>Sonido o Símbolo</strong>. La idea del juego es
-    reconocer elementos relacionados con Argentina a partir de un sonido o de una imagen
-    parcialmente oculta. En cada ronda el jugador tendrá que elegir la opción correcta
-    entre varias respuestas posibles.
-  </p>
+  @if (loading()) {
+    <p>Cargando datos desde GitHub...</p>
+  } @else if (error()) {
+    <p>No se pudieron cargar los datos de GitHub. Intentá nuevamente más tarde.</p>
+  } @else if (user(); as githubUser) {
+    <div class="profile-layout">
+      <img
+        class="avatar"
+        [src]="githubUser.avatar_url"
+        [alt]="'Foto de perfil de ' + (githubUser.name || githubUser.login)"
+      />
 
-  <p>
-    El juego va a tener <strong>5 rondas</strong>. En cada una primero se escuchará un sonido.
-    Si el jugador reconoce el elemento solo con eso y responde bien, va a obtener más puntos.
-    Si no está seguro, podrá usar ayudas, como ver una imagen o símbolo relacionado, pero en
-    ese caso el puntaje será menor.
-  </p>
+      <div class="profile-info">
+        <h3>{{ githubUser.name || githubUser.login }}</h3>
 
-  <p>
-    La temática general del juego estará centrada en elementos argentinos, por ejemplo sonidos,
-    objetos, símbolos, costumbres o referencias culturales del país. De esa forma el juego
-    propio mantiene la misma identidad que el resto de la sala.
-  </p>
+        <p><strong>Usuario de GitHub:</strong> {{ githubUser.login }}</p>
 
-  <p>
-    El desempeño del jugador se podrá medir mediante el puntaje total, la cantidad de aciertos,
-    las ayudas utilizadas y el tiempo total de la partida.
-  </p>
-</div>
+        @if (githubUser.location) {
+          <p><strong>Ubicación:</strong> {{ githubUser.location }}</p>
+        }
+
+        <p><strong>Repositorios públicos:</strong> {{ githubUser.public_repos }}</p>
+        <p><strong>Seguidores:</strong> {{ githubUser.followers }}</p>
+        <p><strong>Siguiendo:</strong> {{ githubUser.following }}</p>
+
+        @if (githubUser.bio) {
+          <p class="bio"><strong>Bio:</strong> {{ githubUser.bio }}</p>
+        }
+
+        <p>
+          <a [href]="githubUser.html_url" target="_blank" rel="noopener noreferrer">
+            Ver perfil en GitHub
+          </a>
+        </p>
+      </div>
+    </div>
+  }
+
+  <div class="game-section">
+    <h3>Juego propio: Sonido o Símbolo</h3>
+
+    <p>
+      Mi juego propio se llamará <strong>Sonido o Símbolo</strong>. La idea del juego es
+      reconocer elementos relacionados con Argentina a partir de un sonido o de una imagen
+      parcialmente oculta. En cada ronda el jugador tendrá que elegir la opción correcta
+      entre varias respuestas posibles.
+    </p>
+
+    <p>
+      El juego va a tener <strong>5 rondas</strong>. En cada una primero se escuchará un sonido.
+      Si el jugador reconoce el elemento solo con eso y responde bien, va a obtener más puntos.
+      Si no está seguro, podrá usar ayudas, como ver una imagen o símbolo relacionado, pero en
+      ese caso el puntaje será menor.
+    </p>
+
+    <p>
+      La temática general del juego estará centrada en elementos argentinos, por ejemplo sonidos,
+      objetos, símbolos, costumbres o referencias culturales del país. De esa forma el juego
+      propio mantiene la misma identidad que el resto de la sala.
+    </p>
+
+    <p>
+      El desempeño del jugador se podrá medir mediante el puntaje total, la cantidad de aciertos,
+      las ayudas utilizadas y el tiempo total de la partida.
+    </p>
+  </div>
+</section>
