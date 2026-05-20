@@ -44,7 +44,7 @@ export class Register implements OnInit {
       return;
     }
 
-    if (!this.edad || this.edad <= 0) {
+    if (!this.edad || this.edad <= 0 || this.edad > 100) {
       this.authService.error.set('Ingresá una edad válida.');
       return;
     }
