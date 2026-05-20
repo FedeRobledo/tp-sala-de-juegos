@@ -1,6 +1,5 @@
-import { Component, OnInit, inject, signal } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
-import { SupabaseService } from '../../services/supabase';
 
 interface MenuItem {
   label: string;
@@ -14,9 +13,7 @@ interface MenuItem {
   templateUrl: './layout.html',
   styleUrl: './layout.css',
 })
-export class Layout implements OnInit {
-  private supabaseService = inject(SupabaseService);
-
+export class Layout {
   sidebarOpen = signal(true);
 
   menuItems: MenuItem[] = [
@@ -46,10 +43,6 @@ export class Layout implements OnInit {
       route: '/home',
     },
   ];
-
-  ngOnInit(): void {
-    this.supabaseService.testConnection();
-  }
 
   toggleSidebar(): void {
     this.sidebarOpen.update((isOpen) => !isOpen);

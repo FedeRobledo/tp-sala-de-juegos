@@ -18,20 +18,4 @@ export class SupabaseService {
   getClient(): SupabaseClient {
     return this.client;
   }
-
-  // TODO: Solo para probar despues borrarlo y sacarlo de layout !!!
-  async testConnection(): Promise<void> {
-    const { error, count } = await this.client
-      .from('profiles')
-      .select('id', { count: 'exact', head: true });
-
-    if (error) {
-      console.error('Error al conectar con Supabase:', error.message);
-      return;
-    }
-
-    console.log('Conexión con Supabase OK. Tabla profiles disponible.', {
-      cantidadDeRegistros: count,
-    });
-  }
 }
