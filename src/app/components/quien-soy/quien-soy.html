@@ -1,70 +1,123 @@
-<section class="page-card">
-  <h2>Quién soy</h2>
+<section class="about-page">
+  <article class="about-hero">
+    <div class="about-copy">
+      <p class="eyebrow">Presentación del alumno</p>
+      <h2>Quién soy</h2>
+      <p>
+        Esta sección presenta los datos obtenidos desde GitHub y la explicación
+        del juego propio elegido para la Sala de Juegos.
+      </p>
+    </div>
+
+    <img
+      src="/escarapela.ico"
+      alt="Escarapela de Sala de Juegos"
+      class="about-logo"
+    />
+  </article>
 
   @if (loading()) {
-    <p>Cargando datos desde GitHub...</p>
+    <article class="state-card">
+      <span class="state-icon">⏳</span>
+      <h3>Cargando datos desde GitHub...</h3>
+      <p>Estamos consultando la información pública del perfil.</p>
+    </article>
   } @else if (error()) {
-    <p>No se pudieron cargar los datos de GitHub. Intentá nuevamente más tarde.</p>
+    <article class="state-card error">
+      <span class="state-icon">⚠️</span>
+      <h3>No se pudieron cargar los datos</h3>
+      <p>Intentá nuevamente más tarde.</p>
+    </article>
   } @else if (user(); as githubUser) {
-    <div class="profile-layout">
-      <img
-        class="avatar"
-        [src]="githubUser.avatar_url"
-        [alt]="'Foto de perfil de ' + (githubUser.name || githubUser.login)"
-      />
+    <article class="profile-card">
+      <div class="avatar-frame">
+        <img
+          class="avatar"
+          [src]="githubUser.avatar_url"
+          [alt]="'Foto de perfil de ' + (githubUser.name || githubUser.login)"
+        />
+      </div>
 
       <div class="profile-info">
+        <p class="eyebrow">Perfil GitHub</p>
         <h3>{{ githubUser.name || githubUser.login }}</h3>
 
-        <p><strong>Usuario de GitHub:</strong> {{ githubUser.login }}</p>
+        <div class="info-grid">
+          <div class="info-item">
+            <span>Usuario</span>
+            <strong>{{ githubUser.login }}</strong>
+          </div>
 
-        @if (githubUser.location) {
-          <p><strong>Ubicación:</strong> {{ githubUser.location }}</p>
-        }
+          @if (githubUser.location) {
+            <div class="info-item">
+              <span>Ubicación</span>
+              <strong>{{ githubUser.location }}</strong>
+            </div>
+          }
 
-        <p><strong>Repositorios públicos:</strong> {{ githubUser.public_repos }}</p>
-        <p><strong>Seguidores:</strong> {{ githubUser.followers }}</p>
-        <p><strong>Siguiendo:</strong> {{ githubUser.following }}</p>
+          <div class="info-item">
+            <span>Repositorios</span>
+            <strong>{{ githubUser.public_repos }}</strong>
+          </div>
+
+          <div class="info-item">
+            <span>Seguidores</span>
+            <strong>{{ githubUser.followers }}</strong>
+          </div>
+
+          <div class="info-item">
+            <span>Siguiendo</span>
+            <strong>{{ githubUser.following }}</strong>
+          </div>
+        </div>
 
         @if (githubUser.bio) {
-          <p class="bio"><strong>Bio:</strong> {{ githubUser.bio }}</p>
+          <p class="bio">{{ githubUser.bio }}</p>
         }
 
-        <p>
-          <a [href]="githubUser.html_url" target="_blank" rel="noopener noreferrer">
-            Ver perfil en GitHub
-          </a>
-        </p>
+        <a
+          class="github-link"
+          [href]="githubUser.html_url"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Ver perfil en GitHub
+        </a>
       </div>
-    </div>
+    </article>
   }
 
-  <div class="game-section">
-    <h3>Juego propio: Sonido o Símbolo</h3>
+  <article class="game-section">
+    <div>
+      <p class="eyebrow">Juego propio</p>
+      <h3>Sonido o Símbolo</h3>
+    </div>
 
-    <p>
-      Mi juego propio se llamará <strong>Sonido o Símbolo</strong>. La idea del juego es
-      reconocer elementos relacionados con Argentina a partir de un sonido o de una imagen
-      parcialmente oculta. En cada ronda el jugador tendrá que elegir la opción correcta
-      entre varias respuestas posibles.
-    </p>
+    <div class="game-content">
+      <p>
+        Mi juego propio se llamará <strong>Sonido o Símbolo</strong>. La idea es
+        reconocer elementos relacionados con Argentina a partir de un sonido o de
+        una imagen parcialmente oculta. En cada ronda el jugador tendrá que elegir
+        la opción correcta entre varias respuestas posibles.
+      </p>
 
-    <p>
-      El juego va a tener <strong>5 rondas</strong>. En cada una primero se escuchará un sonido.
-      Si el jugador reconoce el elemento solo con eso y responde bien, va a obtener más puntos.
-      Si no está seguro, podrá usar ayudas, como ver una imagen o símbolo relacionado, pero en
-      ese caso el puntaje será menor.
-    </p>
+      <p>
+        El juego va a tener <strong>5 rondas</strong>. En cada una primero se
+        escuchará un sonido. Si el jugador reconoce el elemento solo con eso y
+        responde bien, obtiene más puntos. Si no está seguro, puede usar ayudas,
+        como ver una imagen o símbolo relacionado, pero el puntaje será menor.
+      </p>
 
-    <p>
-      La temática general del juego estará centrada en elementos argentinos, por ejemplo sonidos,
-      objetos, símbolos, costumbres o referencias culturales del país. De esa forma el juego
-      propio mantiene la misma identidad que el resto de la sala.
-    </p>
+      <p>
+        La temática estará centrada en elementos argentinos: sonidos, objetos,
+        símbolos, costumbres y referencias culturales del país. De esa forma el
+        juego propio mantiene la identidad general de la sala.
+      </p>
 
-    <p>
-      El desempeño del jugador se podrá medir mediante el puntaje total, la cantidad de aciertos,
-      las ayudas utilizadas y el tiempo total de la partida.
-    </p>
-  </div>
+      <p>
+        El desempeño se podrá medir mediante puntaje total, cantidad de aciertos,
+        ayudas utilizadas y tiempo total de la partida.
+      </p>
+    </div>
+  </article>
 </section>
