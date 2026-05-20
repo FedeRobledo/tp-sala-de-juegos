@@ -232,6 +232,14 @@ export class AuthService {
       return 'La contraseña debe tener al menos 6 caracteres.';
     }
 
+    if (
+      normalizedMessage.includes('unable to validate email address') ||
+      normalizedMessage.includes('invalid format') ||
+      normalizedMessage.includes('email address') && normalizedMessage.includes('invalid')
+    ) {
+      return 'Ingresá un correo electrónico válido.';
+    }
+
     if (normalizedMessage.includes('duplicate key')) {
       return 'El usuario ya se encuentra registrado.';
     }
