@@ -1,41 +1,90 @@
-<section class="page-card">
-  <h2>Registro de usuario</h2>
-  <p class="intro">
-    Esta parte por ahora también está de forma base. En el Sprint 2 se va a agregar
-    el alta real de usuarios y el guardado de datos.
-  </p>
-
-  <form class="form-layout">
-    <div class="form-group">
-      <label for="nombre">Nombre</label>
-      <input id="nombre" type="text" placeholder="Ingresá tu nombre" />
+<section class="auth-page">
+  <article class="auth-card">
+    <div class="auth-header">
+      <span class="auth-icon">🕹️</span>
+      <p class="eyebrow">Nuevo jugador</p>
+      <h2>Crear cuenta</h2>
+      <p>
+        Registrate para ingresar a la Sala de Juegos y guardar tu progreso.
+      </p>
     </div>
 
-    <div class="form-group">
-      <label for="apellido">Apellido</label>
-      <input id="apellido" type="text" placeholder="Ingresá tu apellido" />
-    </div>
+    <form class="auth-form" (ngSubmit)="register()">
+      <div class="form-row">
+        <label>
+          Nombre
+          <input
+            type="text"
+            name="nombre"
+            [(ngModel)]="nombre"
+            placeholder="Federico"
+            autocomplete="given-name"
+          />
+        </label>
 
-    <div class="form-group">
-      <label for="edad">Edad</label>
-      <input id="edad" type="number" placeholder="Ingresá tu edad" />
-    </div>
+        <label>
+          Apellido
+          <input
+            type="text"
+            name="apellido"
+            [(ngModel)]="apellido"
+            placeholder="Robledo"
+            autocomplete="family-name"
+          />
+        </label>
+      </div>
 
-    <div class="form-group">
-      <label for="correo">Correo electrónico</label>
-      <input id="correo" type="email" placeholder="Ingresá tu correo" />
-    </div>
+      <label>
+        Edad
+        <input
+          type="number"
+          name="edad"
+          [(ngModel)]="edad"
+          placeholder="25"
+          min="1"
+        />
+      </label>
 
-    <div class="form-group">
-      <label for="clave">Contraseña</label>
-      <input id="clave" type="password" placeholder="Ingresá tu contraseña" />
-    </div>
+      <label>
+        Correo electrónico
+        <input
+          type="email"
+          name="email"
+          [(ngModel)]="email"
+          placeholder="tu-email@ejemplo.com"
+          autocomplete="email"
+        />
+      </label>
 
-    <button type="button">Registrarse</button>
-  </form>
+      <label>
+        Contraseña
+        <input
+          type="password"
+          name="password"
+          [(ngModel)]="password"
+          placeholder="Mínimo 6 caracteres"
+          autocomplete="new-password"
+        />
+      </label>
 
-  <p class="note">
-    Si ya tenés una cuenta,
-    <a routerLink="/login">inicia sesión</a>.
-  </p>
+      @if (error()) {
+        <div class="message error">
+          {{ error() }}
+        </div>
+      }
+
+      <button class="btn primary" type="submit" [disabled]="loading()">
+        @if (loading()) {
+          Creando cuenta...
+        } @else {
+          Registrarme
+        }
+      </button>
+    </form>
+
+    <p class="auth-footer">
+      ¿Ya tenés cuenta?
+      <a routerLink="/login">Iniciá sesión</a>
+    </p>
+  </article>
 </section>

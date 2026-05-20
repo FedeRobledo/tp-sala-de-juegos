@@ -1,26 +1,72 @@
-<section class="page-card">
-  <h2>Iniciar sesión</h2>
-  <p class="intro">
-    Esta pantalla por ahora es solo la base. En el Sprint 2 se va a conectar
-    con Supabase para validar el usuario de verdad.
-  </p>
-
-  <form class="form-layout">
-    <div class="form-group">
-      <label for="email">Correo electrónico</label>
-      <input id="email" type="email" placeholder="Ingresá tu correo" />
+<section class="auth-page">
+  <article class="auth-card">
+    <div class="auth-header">
+      <span class="auth-icon">🎮</span>
+      <p class="eyebrow">Acceso de jugador</p>
+      <h2>Iniciar sesión</h2>
+      <p>
+        Ingresá con tu correo y contraseña para acceder a la Sala de Juegos.
+      </p>
     </div>
 
-    <div class="form-group">
-      <label for="password">Contraseña</label>
-      <input id="password" type="password" placeholder="Ingresá tu contraseña" />
+    <form class="auth-form" (ngSubmit)="login()">
+      <label>
+        Correo electrónico
+        <input
+          type="email"
+          name="email"
+          [(ngModel)]="email"
+          placeholder="tu-email@ejemplo.com"
+          autocomplete="email"
+        />
+      </label>
+
+      <label>
+        Contraseña
+        <input
+          type="password"
+          name="password"
+          [(ngModel)]="password"
+          placeholder="Ingresá tu contraseña"
+          autocomplete="current-password"
+        />
+      </label>
+
+      @if (error()) {
+        <div class="message error">
+          {{ error() }}
+        </div>
+      }
+
+      <button class="btn primary" type="submit" [disabled]="loading()">
+        @if (loading()) {
+          Ingresando...
+        } @else {
+          Iniciar sesión
+        }
+      </button>
+    </form>
+
+    <div class="quick-access">
+      <p>Inicio rápido para pruebas</p>
+
+      <div class="quick-buttons">
+        @for (user of quickAccessUsers; track user.email) {
+          <button
+            type="button"
+            class="btn quick"
+            [disabled]="loading()"
+            (click)="quickLogin(user)"
+          >
+            {{ user.label }}
+          </button>
+        }
+      </div>
     </div>
 
-    <button type="button">Ingresar</button>
-  </form>
-
-  <p class="note">
-    Si no tenés cuenta todavía,
-    <a routerLink="/register">registrate</a>.
-  </p>
+    <p class="auth-footer">
+      ¿Todavía no tenés cuenta?
+      <a routerLink="/register">Registrate acá</a>
+    </p>
+  </article>
 </section>

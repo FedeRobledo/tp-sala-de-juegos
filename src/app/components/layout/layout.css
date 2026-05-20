@@ -251,4 +251,43 @@
   .auth-actions {
     justify-content: flex-start;
   }
+
+  .user-pill {
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+  padding: 0.65rem 0.9rem;
+  border-radius: 999px;
+  color: #e0f2fe;
+  background: rgba(15, 23, 42, 0.76);
+  border: 1px solid rgba(125, 211, 252, 0.32);
+  font-weight: 900;
+}
+
+.user-icon {
+  display: inline-grid;
+  width: 26px;
+  height: 26px;
+  place-items: center;
+  border-radius: 999px;
+  background: rgba(56, 189, 248, 0.14);
+}
+
+.auth-link.logout {
+  color: #fecaca;
+  background: rgba(127, 29, 29, 0.28);
+  border-color: rgba(248, 113, 113, 0.35);
+  cursor: pointer;
+}
+
+.auth-link.logout:hover:not(:disabled) {
+  color: #ffffff;
+  border-color: rgba(248, 113, 113, 0.7);
+}
+
+.auth-link.logout:disabled {
+  cursor: not-allowed;
+  opacity: 0.65;
+}
 }

@@ -1,5 +1,6 @@
-import { Component, signal } from '@angular/core';
-import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { Component, inject, signal } from '@angular/core';
+import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
+import { AuthService } from '../../services/auth';
 
 interface MenuItem {
   label: string;
@@ -14,6 +15,9 @@ interface MenuItem {
   styleUrl: './layout.css',
 })
 export class Layout {
+  private router = inject(Router);
+  authService = inject(AuthService);
+
   sidebarOpen = signal(true);
 
   menuItems: MenuItem[] = [
@@ -46,5 +50,10 @@ export class Layout {
 
   toggleSidebar(): void {
     this.sidebarOpen.update((isOpen) => !isOpen);
+  }
+
+  async logout(): Promise<void> {
+    await this.authService.logout();
+    this.router.navigateByUrl('/home');
   }
 }

@@ -2,26 +2,43 @@
   <div class="hero-copy">
     <p class="eyebrow">Sprint 2 · Autenticación y navegación</p>
 
-    <h2>Bienvenido a la Sala de Juegos</h2>
+    @if (authService.isLoggedIn()) {
+      <h2>Bienvenido, {{ authService.userDisplayName() }}</h2>
 
-    <p class="hero-text">
-      Una experiencia de minijuegos con identidad argentina, estética gaming moderna
-      y progreso guardado para cada jugador.
-    </p>
+      <p class="hero-text">
+        Ya estás dentro de la Sala de Juegos. Desde acá vas a poder acceder a los
+        juegos, al chat y a tus resultados cuando avancemos con los próximos sprints.
+      </p>
+    } @else {
+      <h2>Bienvenido a la Sala de Juegos</h2>
 
-    <div class="hero-actions">
-      <a routerLink="/login" class="btn primary">Iniciar sesión</a>
-      <a routerLink="/register" class="btn secondary">Crear cuenta</a>
-    </div>
+      <p class="hero-text">
+        Una experiencia de minijuegos con identidad argentina, estética gaming moderna
+        y progreso guardado para cada jugador.
+      </p>
+
+      <div class="hero-actions">
+        <a routerLink="/login" class="btn primary">Iniciar sesión</a>
+        <a routerLink="/register" class="btn secondary">Crear cuenta</a>
+      </div>
+    }
   </div>
 
   <div class="hero-panel">
     <span class="panel-icon">🎮</span>
-    <strong>Modo jugador</strong>
-    <p>
-      En este sprint vamos a conectar la autenticación real para que cada usuario
-      pueda ingresar, jugar y luego guardar sus resultados.
-    </p>
+
+    @if (authService.isLoggedIn()) {
+      <strong>Sesión activa</strong>
+      <p>
+        Tu usuario ya está conectado con Supabase. A partir de ahora podremos guardar
+        partidas, mensajes y estadísticas asociadas a tu perfil.
+      </p>
+    } @else {
+      <strong>Modo invitado</strong>
+      <p>
+        Iniciá sesión o registrate para jugar y guardar tus resultados.
+      </p>
+    }
   </div>
 </section>
 
