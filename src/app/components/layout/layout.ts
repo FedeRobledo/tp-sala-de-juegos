@@ -34,17 +34,17 @@ export class Layout {
     {
       label: 'Juegos',
       icon: '🎮',
-      route: '/home',
+      route: '/juegos',
     },
     {
       label: 'Resultados',
       icon: '🏆',
-      route: '/home',
+      route: '/resultados',
     },
     {
       label: 'Chat',
       icon: '💬',
-      route: '/home',
+      route: '/chat',
     },
   ];
 
