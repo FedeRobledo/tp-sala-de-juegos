@@ -32,6 +32,10 @@ export class AuthService {
     this.listenAuthChanges();
   }
 
+  clearError(): void {
+    this.error.set(null);
+  }
+
   async login(data: LoginData): Promise<boolean> {
     this.loading.set(true);
     this.error.set(null);

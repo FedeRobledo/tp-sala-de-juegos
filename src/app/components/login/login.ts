@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth';
@@ -15,7 +15,7 @@ interface QuickAccessUser {
   templateUrl: './login.html',
   styleUrl: './login.css',
 })
-export class Login {
+export class Login implements OnInit {
   private authService = inject(AuthService);
   private router = inject(Router);
 
@@ -24,6 +24,10 @@ export class Login {
 
   loading = this.authService.loading;
   error = this.authService.error;
+
+  ngOnInit(): void {
+    this.authService.clearError();
+  }
 
   quickAccessUsers: QuickAccessUser[] = [
     {

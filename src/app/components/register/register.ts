@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../services/auth';
@@ -9,7 +9,7 @@ import { AuthService } from '../../services/auth';
   templateUrl: './register.html',
   styleUrl: './register.css',
 })
-export class Register {
+export class Register implements OnInit {
   private authService = inject(AuthService);
   private router = inject(Router);
 
@@ -21,6 +21,10 @@ export class Register {
 
   loading = this.authService.loading;
   error = this.authService.error;
+
+  ngOnInit(): void {
+    this.authService.clearError();
+  }
 
   async register(): Promise<void> {
     this.authService.error.set(null);
