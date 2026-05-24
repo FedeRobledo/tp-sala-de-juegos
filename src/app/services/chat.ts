@@ -1,4 +1,5 @@
 import { Injectable, inject } from '@angular/core';
+import { RealtimeChannel, RealtimePostgresInsertPayload } from '@supabase/supabase-js';
 import { SupabaseService } from './supabase';
 
 export interface ChatMessage {
@@ -23,6 +24,7 @@ export interface SendChatMessageData {
 export class ChatService {
   private supabaseService = inject(SupabaseService);
   private supabase = this.supabaseService.getClient();
+  private channel: RealtimeChannel | null = null;
 
   async getMessages(): Promise<ChatMessage[]> {
     const { data, error } = await this.supabase
@@ -59,5 +61,47 @@ export class ChatService {
     }
 
     return true;
+  }
+
+subscribeToMessages(
+  onNewMessage: (message: ChatMessage) => void,
+  onStatusChange?: (status: string) => void
+): void {
+  this.unsubscribeFromMessages();
+
+  console.log('Iniciando suscripción realtime a chat_messages...');
+
+  this.channel = this.supabase
+    .channel(`chat_messages_channel_${Date.now()}`)
+    .on(
+      'postgres_changes',
+      {
+        event: '*',
+        schema: 'public',
+        table: 'chat_messages',
+      },
+      (payload) => {
+        console.log('Evento realtime recibido:', payload);
+
+        if (payload.eventType === 'INSERT') {
+          onNewMessage(payload.new as ChatMessage);
+        }
+      }
+    )
+    .subscribe((status, error) => {
+      console.log('Estado realtime chat:', status);
+      console.log('Error realtime chat:', error);
+
+      onStatusChange?.(status);
+    });
+}
+
+  unsubscribeFromMessages(): void {
+    if (!this.channel) {
+      return;
+    }
+
+    void this.supabase.removeChannel(this.channel);
+    this.channel = null;
   }
 }
