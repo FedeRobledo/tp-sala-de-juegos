@@ -42,6 +42,11 @@ export class Layout {
       route: '/juegos/ahorcado',
     },
     {
+      label: 'Mayor o Menor',
+      icon: '🃏',
+      route: '/juegos/mayor-menor',
+    },
+    {
       label: 'Resultados',
       icon: '🏆',
       route: '/resultados',

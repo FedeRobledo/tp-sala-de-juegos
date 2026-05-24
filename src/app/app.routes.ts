@@ -9,6 +9,7 @@ import { Proximamente } from './components/proximamente/proximamente';
 import { authGuard } from './guards/auth.guard';
 import { publicGuard } from './guards/public.guard';
 import { Ahorcado } from './components/ahorcado/ahorcado';
+import { MayorMenor } from './components/mayor-menor/mayor-menor';
 
 export const routes: Routes = [
   {
@@ -23,6 +24,11 @@ export const routes: Routes = [
       {
         path: 'juegos/ahorcado',
         component: Ahorcado,
+        canActivate: [authGuard],
+      },
+      {
+        path: 'juegos/mayor-menor',
+        component: MayorMenor,
         canActivate: [authGuard],
       },
       {
