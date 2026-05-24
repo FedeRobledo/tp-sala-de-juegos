@@ -19,11 +19,11 @@
     </div>
 
     <nav class="sidebar-nav" aria-label="Navegación principal">
-      @for (item of menuItems; track item.label) {
+      @for (item of visibleMenuItems(); track item.label) {
         <a
           [routerLink]="item.route"
           routerLinkActive="active"
-          [routerLinkActiveOptions]="{ exact: item.route === '/home' }"
+          [routerLinkActiveOptions]="{ exact: item.route === '/home' || item.route === '/juegos' }"
           class="nav-item"
         >
           <span class="nav-icon">{{ item.icon }}</span>
@@ -38,7 +38,12 @@
     @if (sidebarOpen()) {
       <div class="sidebar-footer">
         <span class="status-dot"></span>
-        <span>Sprint 2 en desarrollo</span>
+
+        @if (authService.isLoggedIn()) {
+          <span>Sprint 3 · sesión activa</span>
+        } @else {
+          <span>Iniciá sesión para jugar</span>
+        }
       </div>
     }
   </aside>
