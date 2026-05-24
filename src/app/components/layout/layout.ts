@@ -37,6 +37,11 @@ export class Layout {
       route: '/juegos',
     },
     {
+      label: 'Ahorcado',
+      icon: '🇦🇷',
+      route: '/juegos/ahorcado',
+    },
+    {
       label: 'Resultados',
       icon: '🏆',
       route: '/resultados',

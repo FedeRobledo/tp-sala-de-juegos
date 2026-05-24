@@ -1,0 +1,353 @@
+.hangman-page {
+  color: #f2f8ff;
+}
+
+.game-header {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  align-items: flex-start;
+  margin-bottom: 1.5rem;
+  padding: 1.5rem;
+  border: 1px solid rgba(127, 208, 255, 0.22);
+  border-radius: 1rem;
+  background: linear-gradient(180deg, #10243a, #07111d);
+}
+
+.game-kicker {
+  margin: 0 0 0.4rem;
+  color: #7fd0ff;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-weight: 800;
+  font-size: 0.8rem;
+}
+
+.game-header h2 {
+  margin: 0;
+  font-size: clamp(2rem, 4vw, 3rem);
+}
+
+.game-description {
+  margin: 0.5rem 0 0;
+  color: #b9cce0;
+}
+
+.new-game-button,
+.primary-button,
+.secondary-button {
+  border: 0;
+  border-radius: 0.7rem;
+  padding: 0.8rem 1.1rem;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.new-game-button,
+.primary-button {
+  background: #7fd0ff;
+  color: #06101b;
+}
+
+.secondary-button {
+  border: 1px solid rgba(127, 208, 255, 0.35);
+  background: transparent;
+  color: #dff3ff;
+}
+
+.game-grid {
+  display: grid;
+  grid-template-columns: 260px minmax(0, 1fr) 280px;
+  gap: 1rem;
+}
+
+.hangman-card {
+  border: 1px solid rgba(127, 208, 255, 0.22);
+  border-radius: 1rem;
+  background: linear-gradient(180deg, #10243a, #07111d);
+  box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.18);
+}
+
+.drawing-card,
+.status-card {
+  padding: 1.2rem;
+}
+
+.main-game-card {
+  padding: 1.5rem;
+  text-align: center;
+}
+
+.hint-box {
+  max-width: 720px;
+  margin: 0 auto 2rem;
+  padding: 1rem;
+  border: 1px dashed rgba(127, 208, 255, 0.32);
+  border-radius: 0.8rem;
+  background: #0b1827;
+}
+
+.hint-label {
+  display: inline-block;
+  margin-bottom: 0.4rem;
+  color: #f7c842;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.hint-box p {
+  margin: 0;
+  color: #d9e7f3;
+}
+
+.word-display {
+  margin: 2rem 0 1rem;
+  color: #ffffff;
+  font-size: clamp(2.2rem, 6vw, 4.4rem);
+  line-height: 1.2;
+  font-weight: 900;
+  letter-spacing: 0.18em;
+  word-break: break-word;
+}
+
+.category {
+  margin: 0 0 2rem;
+  color: #7fd0ff;
+  font-weight: 700;
+}
+
+.letters-grid {
+  display: grid;
+  grid-template-columns: repeat(9, minmax(44px, 1fr));
+  gap: 0.6rem;
+}
+
+.letter-button {
+  min-height: 48px;
+  border: 1px solid rgba(127, 208, 255, 0.22);
+  border-radius: 0.6rem;
+  background: #13283d;
+  color: #f2f8ff;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.letter-button:hover:not(:disabled) {
+  border-color: #7fd0ff;
+  background: #173958;
+}
+
+.letter-button.selected {
+  cursor: not-allowed;
+}
+
+.letter-button.correct {
+  background: #7fd0ff;
+  color: #06101b;
+}
+
+.letter-button.incorrect {
+  background: #7a2330;
+  color: #fff;
+  border-color: #d64a5c;
+}
+
+.status-card h3 {
+  margin: 0 0 1rem;
+  color: #7fd0ff;
+}
+
+.status-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.85rem 0;
+  border-bottom: 1px dashed rgba(127, 208, 255, 0.18);
+  color: #b9cce0;
+}
+
+.status-row strong {
+  color: #ffffff;
+}
+
+.hangman-drawing {
+  position: relative;
+  height: 320px;
+  margin: 0 auto;
+}
+
+.hangman-drawing span {
+  position: absolute;
+  display: block;
+  background: #dff3ff;
+  opacity: 0.18;
+}
+
+.hangman-drawing .base {
+  left: 20px;
+  bottom: 20px;
+  width: 180px;
+  height: 6px;
+  opacity: 1;
+}
+
+.hangman-drawing .post {
+  left: 55px;
+  bottom: 20px;
+  width: 6px;
+  height: 250px;
+  opacity: 1;
+}
+
+.hangman-drawing .beam {
+  left: 55px;
+  top: 50px;
+  width: 130px;
+  height: 6px;
+  opacity: 1;
+}
+
+.hangman-drawing .rope {
+  left: 180px;
+  top: 50px;
+  width: 5px;
+  height: 38px;
+  opacity: 1;
+}
+
+.hangman-drawing .head,
+.hangman-drawing .body,
+.hangman-drawing .arm,
+.hangman-drawing .leg {
+  background: transparent;
+  border-color: #f2f8ff;
+}
+
+.hangman-drawing .head {
+  left: 159px;
+  top: 86px;
+  width: 48px;
+  height: 48px;
+  border: 5px solid #f2f8ff;
+  border-radius: 50%;
+}
+
+.hangman-drawing .body {
+  left: 181px;
+  top: 132px;
+  width: 5px;
+  height: 78px;
+  background: #f2f8ff;
+}
+
+.hangman-drawing .arm {
+  top: 155px;
+  width: 54px;
+  height: 5px;
+  background: #f2f8ff;
+}
+
+.hangman-drawing .arm.left {
+  left: 132px;
+  transform: rotate(-28deg);
+}
+
+.hangman-drawing .arm.right {
+  left: 181px;
+  transform: rotate(28deg);
+}
+
+.hangman-drawing .leg {
+  top: 218px;
+  width: 58px;
+  height: 5px;
+  background: #f2f8ff;
+}
+
+.hangman-drawing .leg.left {
+  left: 132px;
+  transform: rotate(-42deg);
+}
+
+.hangman-drawing .leg.right {
+  left: 178px;
+  transform: rotate(42deg);
+}
+
+.error-1 .head,
+.error-2 .body,
+.error-3 .arm.left,
+.error-4 .arm.right,
+.error-5 .leg.left,
+.error-6 .leg.right {
+  opacity: 1;
+}
+
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  background: rgba(3, 8, 14, 0.74);
+}
+
+.result-modal {
+  width: min(540px, 100%);
+  padding: 1.5rem;
+  border: 1px solid rgba(127, 208, 255, 0.35);
+  border-radius: 1rem;
+  background: #10243a;
+  box-shadow: 0 2rem 4rem rgba(0, 0, 0, 0.4);
+}
+
+.modal-kicker {
+  margin: 0 0 0.5rem;
+  color: #f7c842;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.result-modal h3 {
+  margin: 0;
+  font-size: 2rem;
+}
+
+.modal-text {
+  color: #d9e7f3;
+}
+
+.modal-stats {
+  display: grid;
+  gap: 0.5rem;
+  margin: 1rem 0;
+  color: #b9cce0;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 1050px) {
+  .game-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .drawing-card {
+    display: none;
+  }
+}
+
+@media (max-width: 640px) {
+  .game-header {
+    flex-direction: column;
+  }
+
+  .letters-grid {
+    grid-template-columns: repeat(5, 1fr);
+  }
+}

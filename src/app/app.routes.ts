@@ -8,6 +8,7 @@ import { NotFound } from './components/not-found/not-found';
 import { Proximamente } from './components/proximamente/proximamente';
 import { authGuard } from './guards/auth.guard';
 import { publicGuard } from './guards/public.guard';
+import { Ahorcado } from './components/ahorcado/ahorcado';
 
 export const routes: Routes = [
   {
@@ -20,6 +21,11 @@ export const routes: Routes = [
       { path: 'login', component: Login, canActivate: [publicGuard] },
       { path: 'register', component: Register, canActivate: [publicGuard] },
       {
+        path: 'juegos/ahorcado',
+        component: Ahorcado,
+        canActivate: [authGuard],
+      },
+      {
         path: 'juegos',
         component: Proximamente,
         canActivate: [authGuard],
@@ -27,7 +33,7 @@ export const routes: Routes = [
           titulo: 'Juegos',
           icono: '🎮',
           descripcion:
-            'En el próximo sprint se habilitarán Ahorcado y Mayor o Menor. Por ahora esta sección queda protegida para usuarios logueados.',
+          'Desde esta sección se irán agrupando los juegos disponibles. Ahorcado Argentino ya está habilitado y Mayor o Menor se agregará durante este sprint.',
         },
       },
       {
