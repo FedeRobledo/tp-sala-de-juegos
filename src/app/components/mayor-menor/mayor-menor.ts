@@ -1,5 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, signal } from '@angular/core';
+import { Component, computed, inject, signal } from '@angular/core';
+import { AuthService } from '../../services/auth';
+import { GameResultsService } from '../../services/game-results';
 
 type Suit = 'Oro' | 'Copa' | 'Espada' | 'Basto';
 type Guess = 'mayor' | 'menor';
@@ -21,6 +23,12 @@ export class MayorMenor {
 
   private readonly suits: Suit[] = ['Oro', 'Copa', 'Espada', 'Basto'];
   private readonly values = [1, 2, 3, 4, 5, 6, 7, 10, 11, 12];
+
+  private authService = inject(AuthService);
+  private gameResultsService = inject(GameResultsService);
+  resultSaved = signal(false);
+  savingResult = signal(false);
+  saveResultError = signal<string | null>(null);
 
   currentCard = signal<SpanishCard>(this.getRandomCard());
   nextCard = signal<SpanishCard | null>(null);
@@ -105,6 +113,9 @@ export class MayorMenor {
     this.showResultModal.set(false);
     this.startTime.set(Date.now());
     this.endTime.set(null);
+    this.resultSaved.set(false);
+    this.savingResult.set(false);
+    this.saveResultError.set(null);
   }
 
   closeModal(): void {
@@ -126,6 +137,51 @@ export class MayorMenor {
     return icons[suit];
   }
 
+  private async saveGameResult(): Promise<void> {
+  if (this.resultSaved() || this.savingResult()) {
+    return;
+  }
+
+  const user = this.authService.currentUser();
+
+  if (!user) {
+    this.saveResultError.set('No se pudo guardar el resultado porque no hay usuario logueado.');
+    return;
+  }
+
+  this.savingResult.set(true);
+  this.saveResultError.set(null);
+
+  const saved = await this.gameResultsService.saveResult({
+    userId: user.id,
+    userEmail: user.email ?? null,
+    userName: this.authService.userDisplayName(),
+    game: 'mayor-menor',
+    score: this.score(),
+    timeSeconds: this.timeSeconds(),
+    won: this.won(),
+    details: {
+      correctAnswers: this.correctAnswers(),
+      errors: this.errors(),
+      roundsPlayed: this.roundsPlayed(),
+      maxRounds: this.maxRounds,
+      maxErrors: this.maxErrors,
+      lastGuess: this.lastGuess(),
+      finalCard: this.currentCard(),
+      deck: 'Baraja española',
+    },
+  });
+
+  this.savingResult.set(false);
+
+  if (!saved) {
+    this.saveResultError.set('La partida terminó, pero no se pudo guardar el resultado.');
+    return;
+  }
+
+  this.resultSaved.set(true);
+}
+
   private checkGameState(next: SpanishCard): void {
     const reachedRoundLimit = this.roundsPlayed() >= this.maxRounds;
     const reachedErrorLimit = this.errors() >= this.maxErrors;
@@ -140,6 +196,7 @@ export class MayorMenor {
     this.won.set(this.correctAnswers() >= 6 && !reachedErrorLimit);
     this.endTime.set(Date.now());
     this.showResultModal.set(true);
+    void this.saveGameResult();
   }
 
   private getRandomCard(): SpanishCard {

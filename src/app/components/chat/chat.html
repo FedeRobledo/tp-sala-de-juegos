@@ -1,0 +1,58 @@
+<section class="chat-page">
+  <header class="chat-header">
+    <div>
+      <p class="chat-kicker">Sala global</p>
+      <h2>Chat de jugadores</h2>
+      <p>
+        Mensajes visibles para todos los usuarios logueados. En el próximo paso lo conectamos en tiempo real.
+      </p>
+    </div>
+
+    <button type="button" class="refresh-button" (click)="loadMessages()" [disabled]="loading()">
+      {{ loading() ? 'Actualizando...' : 'Actualizar' }}
+    </button>
+  </header>
+
+  <section class="chat-card">
+    @if (loading()) {
+      <div class="empty-state">Cargando mensajes...</div>
+    } @else {
+      <div class="messages-list">
+        @if (messages().length === 0) {
+          <div class="empty-state">
+            Todavía no hay mensajes. Sé el primero en escribir.
+          </div>
+        }
+
+        @for (message of messages(); track message.id) {
+          <article class="message-bubble" [class.own-message]="isOwnMessage(message)">
+            <div class="message-meta">
+              <strong>{{ getSenderName(message) }}</strong>
+              <span>{{ formatTime(message.created_at) }}</span>
+            </div>
+
+            <p>{{ message.message }}</p>
+          </article>
+        }
+      </div>
+    }
+
+    @if (error()) {
+      <p class="chat-error">{{ error() }}</p>
+    }
+
+    <div class="message-form">
+      <input
+        type="text"
+        placeholder="Escribir mensaje..."
+        [value]="messageText()"
+        (input)="updateMessageText($event)"
+        (keyup.enter)="sendMessage()"
+      />
+
+      <button type="button" (click)="sendMessage()" [disabled]="sending() || !messageText().trim()">
+        {{ sending() ? 'Enviando...' : 'Enviar' }}
+      </button>
+    </div>
+  </section>
+</section>

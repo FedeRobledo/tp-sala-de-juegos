@@ -10,6 +10,7 @@ import { authGuard } from './guards/auth.guard';
 import { publicGuard } from './guards/public.guard';
 import { Ahorcado } from './components/ahorcado/ahorcado';
 import { MayorMenor } from './components/mayor-menor/mayor-menor';
+import { Chat } from './components/chat/chat';
 
 export const routes: Routes = [
   {
@@ -44,14 +45,8 @@ export const routes: Routes = [
       },
       {
         path: 'chat',
-        component: Proximamente,
+        component: Chat,
         canActivate: [authGuard],
-        data: {
-          titulo: 'Chat',
-          icono: '💬',
-          descripcion:
-            'La sala de chat global se implementará en el Sprint 3 con mensajes en tiempo real usando Supabase.',
-        },
       },
       {
         path: 'resultados',

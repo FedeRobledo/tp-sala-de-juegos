@@ -145,6 +145,18 @@
           <span>Puntaje: {{ score() }}</span>
         </div>
 
+        @if (savingResult()) {
+          <p class="save-status">Guardando resultado...</p>
+        }
+
+        @if (resultSaved()) {
+          <p class="save-status success">Resultado guardado correctamente.</p>
+        }
+
+        @if (saveResultError()) {
+          <p class="save-status error">{{ saveResultError() }}</p>
+        }
+        
         <div class="modal-actions">
           <button type="button" class="secondary-button" (click)="closeModal()">Cerrar</button>
           <button type="button" class="primary-button" (click)="newGame()">Nueva partida</button>
