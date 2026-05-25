@@ -6,17 +6,18 @@ import { GameResultsService } from '../../services/game-results';
 interface OwnGameRound {
   soundTitle: string;
   soundDescription: string;
-  hiddenImageMock: string;
+  soundUrl: string;
+  imageUrl: string;
   visualHelp: string;
   correctAnswer: string;
-  options: string[];
+  validAnswers: string[];
 }
 
 interface AnsweredRound {
   round: number;
   soundTitle: string;
   correctAnswer: string;
-  selectedAnswer: string;
+  typedAnswer: string;
   wasCorrect: boolean;
   usedHelp: boolean;
   points: number;
@@ -33,65 +34,75 @@ export class SonidoSimbolo implements OnInit, OnDestroy {
   private gameResultsService = inject(GameResultsService);
 
   private timerId: ReturnType<typeof setInterval> | null = null;
+  private currentAudio: HTMLAudioElement | null = null;
 
   private readonly allRounds: OwnGameRound[] = [
     {
-      soundTitle: 'Ambiente de cancha',
-      soundDescription: 'Se escucha una hinchada cantando con bombos de fondo.',
-      hiddenImageMock: '⚽',
-      visualHelp: 'Se revela parte de una pelota y una tribuna.',
-      correctAnswer: 'Fútbol argentino',
-      options: ['Tango', 'Fútbol argentino', 'Folklore'],
-    },
-    {
-      soundTitle: 'Ronda de mate',
-      soundDescription: 'Se escucha agua caliente cayendo sobre yerba.',
-      hiddenImageMock: '🧉',
-      visualHelp: 'Se revela parte de un mate con bombilla.',
-      correctAnswer: 'Mate',
-      options: ['Mate', 'Asado', 'Empanadas'],
-    },
-    {
-      soundTitle: 'Música ciudadana',
-      soundDescription: 'Se escucha una melodía de tango interpretada con bandoneón.',
-      hiddenImageMock: '🎵',
-      visualHelp: 'Se revela parte de un instrumento asociado al tango.',
-      correctAnswer: 'Bandoneón',
-      options: ['Bombo legüero', 'Bandoneón', 'Charango'],
-    },
-    {
-      soundTitle: 'Mesa de cartas',
-      soundDescription: 'Se escuchan cartas sobre la mesa y una voz cantando truco.',
-      hiddenImageMock: '🃏',
-      visualHelp: 'Se revela parte de una baraja española.',
-      correctAnswer: 'Truco',
-      options: ['Truco', 'Generala', 'Chinchón'],
-    },
-    {
-      soundTitle: 'Brasas encendidas',
-      soundDescription: 'Se escucha fuego, brasas y carne cocinándose en una parrilla.',
-      hiddenImageMock: '🔥',
-      visualHelp: 'Se revela parte de una parrilla con brasas.',
+      soundTitle: 'Pista sonora 1',
+      soundDescription: 'Escuchá con atención el ambiente y pensá en una comida argentina muy típica.',
+      soundUrl: '/assets/sounds/asado.mp3',
+      imageUrl: '/assets/images/asado.png',
+      visualHelp: 'Se revela una figura asociada a fuego, brasas y parrilla.',
       correctAnswer: 'Asado',
-      options: ['Locro', 'Asado', 'Milanesa'],
+      validAnswers: ['asado', 'el asado'],
     },
     {
-      soundTitle: 'Acto patrio',
-      soundDescription: 'Se escucha música de acto escolar y una referencia patria.',
-      hiddenImageMock: '🇦🇷',
-      visualHelp: 'Se revelan colores celeste y blanco.',
-      correctAnswer: 'Escarapela',
-      options: ['Escarapela', 'Obelisco', 'Cabildo'],
+      soundTitle: 'Pista sonora 2',
+      soundDescription: 'Escuchá el instrumento y pensá en una expresión musical argentina muy reconocida.',
+      soundUrl: '/assets/sounds/bandoneon.mp3',
+      imageUrl: '/assets/images/bandoneon.png',
+      visualHelp: 'Se revela una figura asociada a un instrumento usado en el tango.',
+      correctAnswer: 'Bandoneón',
+      validAnswers: ['bandoneon', 'bandoneón'],
+    },
+    {
+      soundTitle: 'Pista sonora 3',
+      soundDescription: 'Escuchá la percusión y pensá en una referencia del folklore argentino.',
+      soundUrl: '/assets/sounds/bombo-leguero.mp3',
+      imageUrl: '/assets/images/bombo-leguero.png',
+      visualHelp: 'Se revela una figura asociada a un instrumento de percusión tradicional.',
+      correctAnswer: 'Bombo legüero',
+      validAnswers: ['bombo leguero', 'bombo legüero', 'bombo'],
+    },
+    {
+      soundTitle: 'Pista sonora 4',
+      soundDescription: 'Escuchá el sonido de mesa y pensá en un juego muy popular en Argentina.',
+      soundUrl: '/assets/sounds/cartas.mp3',
+      imageUrl: '/assets/images/truco.png',
+      visualHelp: 'Se revela una figura asociada a cartas españolas.',
+      correctAnswer: 'Truco',
+      validAnswers: ['truco', 'el truco'],
+    },
+    {
+      soundTitle: 'Pista sonora 5',
+      soundDescription: 'Escuchá el ambiente y pensá en una pasión popular argentina.',
+      soundUrl: '/assets/sounds/futbol.mp3',
+      imageUrl: '/assets/images/futbol.png',
+      visualHelp: 'Se revela una figura asociada a pelota, cancha y tribuna.',
+      correctAnswer: 'Fútbol',
+      validAnswers: ['futbol', 'fútbol', 'futbol argentino', 'fútbol argentino'],
+    },
+    {
+      soundTitle: 'Pista sonora 6',
+      soundDescription: 'Escuchá el sonido y pensá en una costumbre cotidiana argentina.',
+      soundUrl: '/assets/sounds/mate.mp3',
+      imageUrl: '/assets/images/mate.png',
+      visualHelp: 'Se revela una figura asociada a una infusión tradicional.',
+      correctAnswer: 'Mate',
+      validAnswers: ['mate', 'el mate'],
     },
   ];
 
   rounds = signal<OwnGameRound[]>([]);
   currentIndex = signal(0);
-  selectedOption = signal<string | null>(null);
+
+  typedAnswer = signal('');
+  selectedAnswer = signal<string | null>(null);
 
   soundPlayed = signal(false);
   visualHelpUsed = signal(false);
   finished = signal(false);
+  audioError = signal(false);
 
   correctAnswers = signal(0);
   wrongAnswers = signal(0);
@@ -119,23 +130,30 @@ export class SonidoSimbolo implements OnInit, OnDestroy {
 
   won = computed(() => this.correctAnswers() >= 3);
 
+  canAnswer = computed(() => this.typedAnswer().trim().length > 0 && !this.selectedAnswer());
+
   ngOnInit(): void {
     this.startGame();
   }
 
   ngOnDestroy(): void {
     this.stopTimer();
+    this.stopAudio();
   }
 
   startGame(): void {
     this.stopTimer();
+    this.stopAudio();
 
     this.rounds.set(this.getRandomRounds());
     this.currentIndex.set(0);
-    this.selectedOption.set(null);
+
+    this.typedAnswer.set('');
+    this.selectedAnswer.set(null);
     this.soundPlayed.set(false);
     this.visualHelpUsed.set(false);
     this.finished.set(false);
+    this.audioError.set(false);
 
     this.correctAnswers.set(0);
     this.wrongAnswers.set(0);
@@ -151,16 +169,33 @@ export class SonidoSimbolo implements OnInit, OnDestroy {
     this.startTimer();
   }
 
+  updateTypedAnswer(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    this.typedAnswer.set(input.value);
+  }
+
   playSound(): void {
-    if (this.selectedOption()) {
+    const round = this.currentRound();
+
+    if (!round || this.selectedAnswer()) {
       return;
     }
 
+    this.stopAudio();
     this.soundPlayed.set(true);
+    this.audioError.set(false);
+
+    this.currentAudio = new Audio(round.soundUrl);
+    this.currentAudio.volume = 0.85;
+
+    this.currentAudio.play().catch((error) => {
+      console.error('No se pudo reproducir el sonido:', error);
+      this.audioError.set(true);
+    });
   }
 
   useVisualHelp(): void {
-    if (this.visualHelpUsed() || this.selectedOption()) {
+    if (this.visualHelpUsed() || this.selectedAnswer()) {
       return;
     }
 
@@ -168,17 +203,20 @@ export class SonidoSimbolo implements OnInit, OnDestroy {
     this.usedHelps.update((value) => value + 1);
   }
 
-  selectOption(option: string): void {
+  submitAnswer(): void {
     const round = this.currentRound();
+    const answer = this.typedAnswer().trim();
 
-    if (!round || this.selectedOption() || this.finished()) {
+    if (!round || !answer || this.selectedAnswer() || this.finished()) {
       return;
     }
 
-    const wasCorrect = option === round.correctAnswer;
+    this.stopAudio();
+
+    const wasCorrect = this.isCorrectAnswer(answer, round.validAnswers);
     const points = this.getRoundPoints(wasCorrect);
 
-    this.selectedOption.set(option);
+    this.selectedAnswer.set(answer);
 
     if (wasCorrect) {
       this.correctAnswers.update((value) => value + 1);
@@ -193,7 +231,7 @@ export class SonidoSimbolo implements OnInit, OnDestroy {
         round: this.currentRoundNumber(),
         soundTitle: round.soundTitle,
         correctAnswer: round.correctAnswer,
-        selectedAnswer: option,
+        typedAnswer: answer,
         wasCorrect,
         usedHelp: this.visualHelpUsed(),
         points,
@@ -202,26 +240,23 @@ export class SonidoSimbolo implements OnInit, OnDestroy {
 
     setTimeout(() => {
       this.goToNextRound();
-    }, 900);
+    }, 1200);
   }
 
-  getOptionClass(option: string): string {
-    const round = this.currentRound();
-    const selectedOption = this.selectedOption();
+  private isCorrectAnswer(answer: string, validAnswers: string[]): boolean {
+    const normalizedAnswer = this.normalizeAnswer(answer);
 
-    if (!round || !selectedOption) {
-      return '';
-    }
+    return validAnswers.some((validAnswer) => this.normalizeAnswer(validAnswer) === normalizedAnswer);
+  }
 
-    if (option === round.correctAnswer) {
-      return 'correct';
-    }
-
-    if (option === selectedOption) {
-      return 'wrong';
-    }
-
-    return 'disabled';
+  private normalizeAnswer(value: string): string {
+    return value
+      .toLowerCase()
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .replace(/[^a-z0-9ñ\s]/g, '')
+      .replace(/\s+/g, ' ')
+      .trim();
   }
 
   private getRoundPoints(wasCorrect: boolean): number {
@@ -241,14 +276,17 @@ export class SonidoSimbolo implements OnInit, OnDestroy {
     }
 
     this.currentIndex.update((value) => value + 1);
-    this.selectedOption.set(null);
+    this.typedAnswer.set('');
+    this.selectedAnswer.set(null);
     this.soundPlayed.set(false);
     this.visualHelpUsed.set(false);
+    this.audioError.set(false);
   }
 
   private finishGame(): void {
     this.finished.set(true);
     this.stopTimer();
+    this.stopAudio();
     void this.saveGameResult();
   }
 
@@ -284,7 +322,8 @@ export class SonidoSimbolo implements OnInit, OnDestroy {
         maxPointsPerRoundWithoutHelp: 20,
         maxPointsPerRoundWithHelp: 10,
         answeredRounds: this.answeredRounds(),
-        mockMode: true,
+        usesRealAssets: true,
+        answerMode: 'typed-one-attempt',
       },
     });
 
@@ -299,13 +338,7 @@ export class SonidoSimbolo implements OnInit, OnDestroy {
   }
 
   private getRandomRounds(): OwnGameRound[] {
-    return [...this.allRounds]
-      .sort(() => Math.random() - 0.5)
-      .slice(0, 5)
-      .map((round) => ({
-        ...round,
-        options: [...round.options].sort(() => Math.random() - 0.5),
-      }));
+    return [...this.allRounds].sort(() => Math.random() - 0.5).slice(0, 5);
   }
 
   private startTimer(): void {
@@ -321,5 +354,15 @@ export class SonidoSimbolo implements OnInit, OnDestroy {
 
     clearInterval(this.timerId);
     this.timerId = null;
+  }
+
+  private stopAudio(): void {
+    if (!this.currentAudio) {
+      return;
+    }
+
+    this.currentAudio.pause();
+    this.currentAudio.currentTime = 0;
+    this.currentAudio = null;
   }
 }

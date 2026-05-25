@@ -4,8 +4,9 @@
       <p class="section-kicker">Juego propio</p>
       <h2>Sonido o Símbolo</h2>
       <p>
-        Primero escuchá el sonido y elegí la respuesta correcta. Si necesitás ayuda,
-        podés revelar una imagen parcialmente oculta, pero el puntaje de esa ronda será menor.
+        Primero escuchá el sonido e intentá escribir la respuesta correcta. Si necesitás ayuda,
+        podés revelar un símbolo parcialmente oculto, pero el puntaje de esa ronda será menor.
+        Tenés un solo intento por ronda.
       </p>
     </div>
 
@@ -82,7 +83,7 @@
           type="button"
           class="clue-tile"
           [class.revealed]="soundPlayed()"
-          [disabled]="selectedOption() !== null"
+          [disabled]="selectedAnswer() !== null"
           (click)="playSound()"
         >
           <span class="tile-label">Sonido</span>
@@ -93,38 +94,70 @@
           } @else {
             <p>Presioná para escuchar la pista sonora.</p>
           }
+
+          @if (audioError()) {
+            <p class="asset-error">
+              No se pudo reproducir el sonido. Revisá que el archivo exista.
+            </p>
+          }
         </button>
 
         <button
           type="button"
           class="clue-tile visual-tile"
           [class.revealed]="visualHelpUsed()"
-          [disabled]="visualHelpUsed() || selectedOption() !== null"
+          [disabled]="visualHelpUsed() || selectedAnswer() !== null"
           (click)="useVisualHelp()"
         >
-          <span class="tile-label">Simbolo</span>
+          <span class="tile-label">Símbolo</span>
 
           @if (visualHelpUsed()) {
-            <div class="hidden-symbol">{{ round.hiddenImageMock }}</div>
+            <div class="symbol-frame">
+              <img [src]="round.imageUrl" alt="Símbolo desbloqueado" />
+            </div>
+
             <p>{{ round.visualHelp }}</p>
           } @else {
             <div class="hidden-symbol covered">?</div>
-            <p>Revelar simbolo: la ronda pasa a valer 10 puntos.</p>
+            <p>Mostrar símbolo: la ronda pasa a valer 10 puntos.</p>
           }
         </button>
       </section>
 
-      <div class="options-grid three-options">
-        @for (option of round.options; track option) {
-          <button
-            type="button"
-            class="option-button"
-            [ngClass]="getOptionClass(option)"
-            [disabled]="selectedOption() !== null"
-            (click)="selectOption(option)"
-          >
-            {{ option }}
+      <div class="answer-panel">
+        <label for="answer">Tu respuesta</label>
+
+        <div class="answer-row">
+          <input
+            id="answer"
+            type="text"
+            autocomplete="off"
+            [value]="typedAnswer()"
+            [disabled]="selectedAnswer() !== null"
+            (input)="updateTypedAnswer($event)"
+            (keydown.enter)="submitAnswer(); $event.preventDefault()"
+            placeholder="Escribí la palabra..."
+          />
+
+          <button type="button" class="main-button" [disabled]="!canAnswer()" (click)="submitAnswer()">
+            Responder
           </button>
+        </div>
+
+        <p class="attempt-note">
+          Tenés un solo intento. Se aceptan respuestas sin tildes.
+        </p>
+
+        @if (selectedAnswer(); as answer) {
+          @if (answeredRounds()[answeredRounds().length - 1].wasCorrect) {
+            <p class="answer-feedback correct">
+              Correcto. La respuesta era {{ round.correctAnswer }}.
+            </p>
+          } @else {
+            <p class="answer-feedback wrong">
+              Incorrecto. Tu respuesta fue “{{ answer }}”. La respuesta era {{ round.correctAnswer }}.
+            </p>
+          }
         }
       </div>
 

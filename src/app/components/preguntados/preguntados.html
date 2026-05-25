@@ -63,6 +63,18 @@
         </div>
       </div>
 
+      @if (savingResult()) {
+        <p class="save-status">Guardando resultado...</p>
+      }
+
+      @if (resultSaved()) {
+        <p class="save-status success">Resultado guardado correctamente.</p>
+      }
+
+      @if (saveResultError()) {
+        <p class="save-status error">{{ saveResultError() }}</p>
+      }
+
       <button type="button" class="main-button" (click)="restartGame()">
         Jugar otra vez
       </button>
