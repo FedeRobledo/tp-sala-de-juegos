@@ -5,7 +5,8 @@ import { AuthService } from '../../services/auth';
 interface MenuItem {
   label: string;
   route: string;
-  requiresAuth?: boolean;
+  showWhenLoggedIn?: boolean;
+  showWhenLoggedOut?: boolean;
 }
 
 @Component({
@@ -20,44 +21,39 @@ export class Layout {
 
   private menuItems: MenuItem[] = [
     {
-      label: 'Home',
+      label: 'Inicio',
       route: '/home',
+      showWhenLoggedIn: true,
+      showWhenLoggedOut: true,
     },
     {
       label: 'Quién soy',
       route: '/quien-soy',
+      showWhenLoggedIn: true,
+      showWhenLoggedOut: true,
     },
     {
       label: 'Juegos',
       route: '/juegos',
-      requiresAuth: true,
-    },
-    {
-      label: 'Ahorcado',
-      route: '/juegos/ahorcado',
-      requiresAuth: true,
-    },
-    {
-      label: 'Mayor o Menor',
-      route: '/juegos/mayor-menor',
-      requiresAuth: true,
-    },
-    {
-      label: 'Chat',
-      route: '/chat',
-      requiresAuth: true,
+      showWhenLoggedIn: true,
     },
     {
       label: 'Resultados',
       route: '/resultados',
-      requiresAuth: true,
+      showWhenLoggedIn: true,
     },
   ];
 
   visibleMenuItems = computed(() => {
     const isLoggedIn = this.authService.isLoggedIn();
 
-    return this.menuItems.filter((item) => !item.requiresAuth || isLoggedIn);
+    return this.menuItems.filter((item) => {
+      if (isLoggedIn) {
+        return item.showWhenLoggedIn;
+      }
+
+      return item.showWhenLoggedOut;
+    });
   });
 
   async logout(): Promise<void> {
