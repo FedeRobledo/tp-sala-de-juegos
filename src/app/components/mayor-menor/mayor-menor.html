@@ -14,7 +14,9 @@
   <div class="game-grid">
     <section class="game-card table-card">
       <div class="round-info">
-        <span>Ronda {{ roundsPlayed() + 1 > maxRounds ? maxRounds : roundsPlayed() + 1 }} / {{ maxRounds }}</span>
+        <span>
+          Ronda {{ roundsPlayed() + 1 > maxRounds ? maxRounds : roundsPlayed() + 1 }} / {{ maxRounds }}
+        </span>
         <strong>{{ lastResultMessage() }}</strong>
       </div>
 
@@ -107,12 +109,17 @@
       </div>
 
       <div class="status-row">
+        <span>Intentos restantes</span>
+        <strong>{{ remainingErrors() }}</strong>
+      </div>
+
+      <div class="status-row">
         <span>Tiempo</span>
         <strong>{{ timeSeconds() }} s</strong>
       </div>
 
       <div class="status-row">
-        <span>Puntaje estimado</span>
+        <span>Puntaje actual</span>
         <strong>{{ score() }}</strong>
       </div>
 
@@ -126,7 +133,7 @@
 
   @if (showResultModal()) {
     <div class="modal-backdrop">
-      <section class="result-modal">
+      <section class="result-modal" [class.win]="won()" [class.lose]="!won()">
         <p class="modal-kicker">{{ won() ? 'Victoria' : 'Derrota' }}</p>
 
         <h3>
@@ -156,7 +163,7 @@
         @if (saveResultError()) {
           <p class="save-status error">{{ saveResultError() }}</p>
         }
-        
+
         <div class="modal-actions">
           <button type="button" class="secondary-button" (click)="closeModal()">Cerrar</button>
           <button type="button" class="primary-button" (click)="newGame()">Nueva partida</button>

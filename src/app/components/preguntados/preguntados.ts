@@ -16,6 +16,7 @@ export class Preguntados implements OnInit, OnDestroy {
   private gameResultsService = inject(GameResultsService);
 
   private timerId: ReturnType<typeof setInterval> | null = null;
+  private nextQuestionTimeoutId: ReturnType<typeof setTimeout> | null = null;
 
   questions = signal<TriviaQuestion[]>([]);
   currentIndex = signal(0);
@@ -71,10 +72,12 @@ export class Preguntados implements OnInit, OnDestroy {
 
   ngOnDestroy(): void {
     this.stopTimer();
+    this.clearNextQuestionTimeout();
   }
 
   async startGame(): Promise<void> {
     this.stopTimer();
+    this.clearNextQuestionTimeout();
 
     this.loading.set(true);
     this.errorMessage.set(null);
@@ -132,7 +135,9 @@ export class Preguntados implements OnInit, OnDestroy {
       },
     ]);
 
-    setTimeout(() => {
+    this.clearNextQuestionTimeout();
+
+    this.nextQuestionTimeoutId = setTimeout(() => {
       this.goToNextQuestion();
     }, 850);
   }
@@ -161,6 +166,8 @@ export class Preguntados implements OnInit, OnDestroy {
   }
 
   private goToNextQuestion(): void {
+    this.clearNextQuestionTimeout();
+
     const isLastQuestion = this.currentIndex() >= this.questions().length - 1;
 
     if (isLastQuestion) {
@@ -175,6 +182,8 @@ export class Preguntados implements OnInit, OnDestroy {
   private finishGame(): void {
     this.finished.set(true);
     this.stopTimer();
+    this.clearNextQuestionTimeout();
+
     void this.saveGameResult();
   }
 
@@ -221,6 +230,8 @@ export class Preguntados implements OnInit, OnDestroy {
   }
 
   private startTimer(): void {
+    this.stopTimer();
+
     this.timerId = setInterval(() => {
       this.elapsedSeconds.update((value) => value + 1);
     }, 1000);
@@ -233,5 +244,14 @@ export class Preguntados implements OnInit, OnDestroy {
 
     clearInterval(this.timerId);
     this.timerId = null;
+  }
+
+  private clearNextQuestionTimeout(): void {
+    if (!this.nextQuestionTimeoutId) {
+      return;
+    }
+
+    clearTimeout(this.nextQuestionTimeoutId);
+    this.nextQuestionTimeoutId = null;
   }
 }

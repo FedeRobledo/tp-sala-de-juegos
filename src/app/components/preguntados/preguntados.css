@@ -9,6 +9,8 @@
 }
 
 .trivia-header {
+  position: relative;
+  overflow: hidden;
   display: flex;
   justify-content: space-between;
   gap: 1rem;
@@ -24,6 +26,17 @@
     inset 0 0 0 1px rgba(255, 255, 255, 0.04);
 }
 
+.trivia-header::before {
+  content: '';
+  position: absolute;
+  left: 24px;
+  right: 24px;
+  top: -4px;
+  height: 7px;
+  background: linear-gradient(90deg, transparent, #7fd0ff, transparent);
+  opacity: 0.7;
+}
+
 .section-kicker {
   display: inline-flex;
   margin: 0 0 0.9rem;
@@ -35,11 +48,12 @@
   font-weight: 900;
   letter-spacing: 1px;
   text-transform: uppercase;
+  clip-path: polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%);
 }
 
 .trivia-header h2 {
   margin: 0;
-  font-size: clamp(2.1rem, 5vw, 4rem);
+  font-size: clamp(2.2rem, 5vw, 4rem);
   line-height: 0.95;
   text-transform: uppercase;
   font-weight: 900;
@@ -55,7 +69,7 @@
 }
 
 .score-card {
-  min-width: 150px;
+  min-width: 160px;
   display: grid;
   place-items: center;
   padding: 1rem;
@@ -86,7 +100,13 @@
   border: 2px solid rgba(127, 208, 255, 0.24);
   border-radius: 28px 10px;
   background: linear-gradient(180deg, rgba(16, 36, 58, 0.96), rgba(7, 17, 29, 0.98));
-  box-shadow: 0 20px 34px rgba(0, 0, 0, 0.32);
+  box-shadow:
+    0 20px 34px rgba(0, 0, 0, 0.32),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+}
+
+.error-state {
+  border-color: rgba(255, 112, 112, 0.42);
 }
 
 .game-status {
@@ -138,7 +158,7 @@
 }
 
 .option-button {
-  min-height: 78px;
+  min-height: 84px;
   padding: 1rem;
   border: 2px solid rgba(127, 208, 255, 0.24);
   border-radius: 18px 8px;
@@ -148,10 +168,12 @@
   font-weight: 900;
   text-align: left;
   cursor: pointer;
+  box-shadow: 0 12px 18px rgba(0, 0, 0, 0.18);
   transition:
     transform 0.18s ease,
     border-color 0.18s ease,
-    filter 0.18s ease;
+    filter 0.18s ease,
+    opacity 0.18s ease;
 }
 
 .option-button:hover:not(:disabled) {
@@ -177,9 +199,13 @@
 .live-summary,
 .summary-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 0.9rem;
   margin-top: 1rem;
+}
+
+.summary-grid {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 .live-summary div,
@@ -220,24 +246,64 @@
 }
 
 .main-button {
+  position: relative;
+  isolation: isolate;
   margin-top: 1.2rem;
   padding: 13px 18px;
   border: 0;
-  border-radius: 10px 4px;
   color: #06101b;
-  background: linear-gradient(180deg, #b9ebff, #5ec0f2);
+  background: transparent;
+  font: inherit;
   font-weight: 900;
   text-transform: uppercase;
   cursor: pointer;
+  transition:
+    transform 0.15s ease,
+    filter 0.15s ease;
+}
+
+.main-button::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: 10px 4px;
+  background: linear-gradient(180deg, #b9ebff, #5ec0f2);
   box-shadow: 0 6px 0 #255d84;
+  transform: skewX(-12deg);
+}
+
+.main-button:hover {
+  filter: brightness(1.08);
 }
 
 .main-button:active {
   transform: translateY(3px);
-  box-shadow: 0 3px 0 #255d84;
 }
 
-@media (max-width: 800px) {
+.save-status {
+  margin: 1rem 0 0;
+  padding: 0.75rem;
+  border: 1px solid rgba(127, 208, 255, 0.22);
+  border-radius: 12px 4px;
+  color: #d9e7f3;
+  background: rgba(127, 208, 255, 0.1);
+  font-weight: 800;
+}
+
+.save-status.success {
+  color: #bbf7d0;
+  border-color: rgba(34, 197, 94, 0.35);
+  background: rgba(34, 197, 94, 0.12);
+}
+
+.save-status.error {
+  color: #fecdd3;
+  border-color: rgba(239, 68, 68, 0.35);
+  background: rgba(239, 68, 68, 0.12);
+}
+
+@media (max-width: 900px) {
   .trivia-header {
     flex-direction: column;
   }
@@ -246,23 +312,23 @@
     place-items: start;
   }
 
+  .live-summary {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
   .options-grid,
   .live-summary,
   .summary-grid {
     grid-template-columns: 1fr;
   }
-}
 
-.save-status {
-  margin: 1rem 0 0;
-  color: #dceeff;
-  font-weight: 800;
-}
+  .game-status {
+    flex-direction: column;
+  }
 
-.save-status.success {
-  color: #60dc96;
-}
-
-.save-status.error {
-  color: #ff8a8a;
+  .main-button {
+    width: 100%;
+  }
 }

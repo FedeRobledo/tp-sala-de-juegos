@@ -1,27 +1,29 @@
 <section class="trivia-page">
   <header class="trivia-header">
     <div>
-      <p class="section-kicker">Preguntados</p>
-      <h2>Respondé las preguntas</h2>
+      <p class="section-kicker">Juego actual</p>
+      <h2>Preguntados</h2>
       <p>
-        Elegí una opción por ronda. Las preguntas se obtienen desde una API externa y el
-        resultado final se calcula según tus respuestas correctas.
+        Respondé preguntas obtenidas desde una API externa. Elegí una opción por ronda,
+        sumá puntos por cada acierto y completá la partida con la mayor cantidad de respuestas correctas.
       </p>
     </div>
 
     <div class="score-card">
-      <span>Puntaje</span>
+      <span>Puntaje actual</span>
       <strong>{{ score() }}</strong>
     </div>
   </header>
 
   @if (loading()) {
     <section class="state-card">
+      <p class="section-kicker">Cargando</p>
       <h3>Cargando preguntas...</h3>
-      <p>Estamos preparando una partida nueva.</p>
+      <p>Estamos preparando una partida nueva con preguntas desde la API.</p>
     </section>
   } @else if (errorMessage()) {
-    <section class="state-card">
+    <section class="state-card error-state">
+      <p class="section-kicker">Error</p>
       <h3>No se pudo iniciar la partida</h3>
       <p>{{ errorMessage() }}</p>
 
@@ -54,7 +56,7 @@
 
         <div>
           <span>Tiempo</span>
-          <strong>{{ elapsedSeconds() }}s</strong>
+          <strong>{{ elapsedSeconds() }} s</strong>
         </div>
 
         <div>
@@ -83,7 +85,7 @@
     <section class="game-panel">
       <div class="game-status">
         <span>Pregunta {{ currentQuestionNumber() }} de {{ totalQuestions() }}</span>
-        <span>{{ elapsedSeconds() }}s</span>
+        <span>{{ elapsedSeconds() }} s</span>
       </div>
 
       <div class="question-card">
@@ -118,6 +120,16 @@
         <div>
           <span>Incorrectas</span>
           <strong>{{ wrongAnswers() }}</strong>
+        </div>
+
+        <div>
+          <span>Tiempo</span>
+          <strong>{{ elapsedSeconds() }} s</strong>
+        </div>
+
+        <div>
+          <span>Puntaje</span>
+          <strong>{{ score() }}</strong>
         </div>
       </div>
     </section>
