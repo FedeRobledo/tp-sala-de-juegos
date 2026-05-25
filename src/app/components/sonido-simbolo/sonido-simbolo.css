@@ -9,6 +9,8 @@
 }
 
 .own-game-header {
+  position: relative;
+  overflow: hidden;
   display: flex;
   justify-content: space-between;
   gap: 1rem;
@@ -17,11 +19,22 @@
   border: 2px solid rgba(127, 208, 255, 0.28);
   border-radius: 30px 10px;
   background:
-    radial-gradient(circle at right top, rgba(247, 200, 66, 0.16), transparent 34%),
+    radial-gradient(circle at right top, rgba(127, 208, 255, 0.18), transparent 34%),
     linear-gradient(180deg, rgba(16, 36, 58, 0.98), rgba(7, 17, 29, 0.98));
   box-shadow:
     0 22px 40px rgba(0, 0, 0, 0.34),
     inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+}
+
+.own-game-header::before {
+  content: '';
+  position: absolute;
+  left: 24px;
+  right: 24px;
+  top: -4px;
+  height: 7px;
+  background: linear-gradient(90deg, transparent, #7fd0ff, transparent);
+  opacity: 0.7;
 }
 
 .section-kicker {
@@ -35,11 +48,12 @@
   font-weight: 900;
   letter-spacing: 1px;
   text-transform: uppercase;
+  clip-path: polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%);
 }
 
 .own-game-header h2 {
   margin: 0;
-  font-size: clamp(2.1rem, 5vw, 4rem);
+  font-size: clamp(2.2rem, 5vw, 4rem);
   line-height: 0.95;
   text-transform: uppercase;
   font-weight: 900;
@@ -55,7 +69,7 @@
 }
 
 .score-card {
-  min-width: 150px;
+  min-width: 160px;
   display: grid;
   place-items: center;
   padding: 1rem;
@@ -74,7 +88,7 @@
 }
 
 .score-card strong {
-  color: #f7c842;
+  color: #7fd0ff;
   font-size: 2.4rem;
   line-height: 1;
 }
@@ -85,7 +99,9 @@
   border: 2px solid rgba(127, 208, 255, 0.24);
   border-radius: 28px 10px;
   background: linear-gradient(180deg, rgba(16, 36, 58, 0.96), rgba(7, 17, 29, 0.98));
-  box-shadow: 0 20px 34px rgba(0, 0, 0, 0.32);
+  box-shadow:
+    0 20px 34px rgba(0, 0, 0, 0.32),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.04);
 }
 
 .game-status {
@@ -106,33 +122,31 @@
 }
 
 .clue-tile {
-  min-height: 250px;
+  min-height: 280px;
   display: grid;
   align-content: start;
-  gap: 0.8rem;
-  padding: 1.2rem;
+  padding: 1.4rem;
   border: 2px solid rgba(127, 208, 255, 0.24);
-  border-radius: 22px 8px;
+  border-radius: 24px 8px;
   color: #f2f8ff;
   background:
-    radial-gradient(circle at top right, rgba(127, 208, 255, 0.13), transparent 36%),
-    linear-gradient(180deg, rgba(16, 36, 58, 0.98), rgba(6, 16, 27, 0.98));
-  text-align: left;
+    radial-gradient(circle at top right, rgba(127, 208, 255, 0.12), transparent 34%),
+    #10243a;
   font: inherit;
+  text-align: left;
   cursor: pointer;
-  box-shadow:
-    0 14px 22px rgba(0, 0, 0, 0.26),
-    inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+  box-shadow: 0 18px 26px rgba(0, 0, 0, 0.26);
   transition:
     transform 0.18s ease,
     border-color 0.18s ease,
-    filter 0.18s ease;
+    filter 0.18s ease,
+    opacity 0.18s ease;
 }
 
 .clue-tile:hover:not(:disabled) {
   transform: translateY(-4px);
   border-color: #7fd0ff;
-  filter: brightness(1.1);
+  filter: brightness(1.08);
 }
 
 .clue-tile:disabled {
@@ -140,14 +154,13 @@
 }
 
 .clue-tile.revealed {
-  border-color: rgba(247, 200, 66, 0.42);
-  background:
-    radial-gradient(circle at top right, rgba(247, 200, 66, 0.16), transparent 36%),
-    linear-gradient(180deg, rgba(16, 36, 58, 0.98), rgba(6, 16, 27, 0.98));
+  border-color: rgba(247, 200, 66, 0.52);
 }
 
 .tile-label {
-  width: fit-content;
+  display: flex;
+  width: 100%;
+  margin-bottom: 1.5rem;
   padding: 6px 10px;
   border: 1px solid rgba(247, 200, 66, 0.32);
   color: #ffeaa0;
@@ -157,72 +170,88 @@
   text-transform: uppercase;
 }
 
-.clue-tile strong {
+.sound-frame {
+  width: 100%;
+  min-height: 180px;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 0.65rem;
+  margin: 0.5rem auto 1rem;
+  padding: 1rem;
+  text-align: center;
+}
+
+.sound-frame strong {
+  max-width: 100%;
   color: #7fd0ff;
-  font-size: clamp(1.35rem, 3vw, 2rem);
-  line-height: 1.05;
+  font-size: clamp(1.4rem, 2.8vw, 2rem);
+  line-height: 1.15;
+  text-transform: uppercase;
+  text-wrap: balance;
+}
+
+.sound-frame span {
+  max-width: 280px;
+  color: #dceeff;
+  font-size: 0.95rem;
+  line-height: 1.4;
 }
 
 .clue-tile p {
-  margin: 0;
+  margin: 1rem 0 0;
   color: #dceeff;
   line-height: 1.55;
 }
 
+.asset-error {
+  color: #fecdd3 !important;
+  font-weight: 800;
+}
+
 .visual-tile {
-  place-items: stretch;
+  display: grid;
+  align-content: start;
 }
 
 .hidden-symbol {
-  width: 130px;
-  height: 130px;
   display: grid;
   place-items: center;
-  overflow: hidden;
-  border: 2px solid rgba(127, 208, 255, 0.28);
-  border-radius: 22px 8px;
-  background:
-    linear-gradient(135deg, rgba(7, 17, 29, 0.78) 0 35%, transparent 35% 65%, rgba(7, 17, 29, 0.86) 65% 100%),
-    rgba(127, 208, 255, 0.12);
-  font-size: 3.4rem;
-  filter: grayscale(0.2);
-}
-
-.hidden-symbol.covered {
+  width: min(220px, 100%);
+  aspect-ratio: 1;
+  margin: 0.5rem auto 1rem;
+  border: 2px dashed rgba(127, 208, 255, 0.35);
+  border-radius: 24px 8px;
   color: #7fd0ff;
   background:
     repeating-linear-gradient(
-      135deg,
-      rgba(127, 208, 255, 0.14) 0 10px,
-      rgba(7, 17, 29, 0.88) 10px 20px
+      45deg,
+      rgba(127, 208, 255, 0.08),
+      rgba(127, 208, 255, 0.08) 10px,
+      rgba(247, 200, 66, 0.08) 10px,
+      rgba(247, 200, 66, 0.08) 20px
     );
-  font-size: 3rem;
+  font-size: 4rem;
   font-weight: 900;
 }
 
 .symbol-frame {
-  width: 150px;
-  height: 150px;
+  width: min(230px, 100%);
+  aspect-ratio: 1;
   display: grid;
   place-items: center;
-  overflow: hidden;
-  border: 2px solid rgba(127, 208, 255, 0.28);
-  border-radius: 22px 8px;
-  background:
-    linear-gradient(135deg, rgba(7, 17, 29, 0.35), rgba(127, 208, 255, 0.08)),
-    rgba(6, 16, 27, 0.72);
+  margin: 0.5rem auto 1rem;
+  padding: 0.8rem;
+  border: 2px solid rgba(127, 208, 255, 0.3);
+  border-radius: 24px 8px;
+  background: rgba(6, 16, 27, 0.72);
 }
 
 .symbol-frame img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  filter: contrast(1.05) saturate(0.92);
-}
-
-.asset-error {
-  color: #ff8a8a !important;
-  font-weight: 800;
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+  filter: drop-shadow(0 12px 18px rgba(0, 0, 0, 0.35));
 }
 
 .answer-panel {
@@ -235,8 +264,8 @@
 
 .answer-panel label {
   display: block;
-  margin-bottom: 0.65rem;
-  color: #7fd0ff;
+  margin-bottom: 0.7rem;
+  color: #ffeaa0;
   font-size: 0.85rem;
   font-weight: 900;
   text-transform: uppercase;
@@ -245,71 +274,64 @@
 .answer-row {
   display: flex;
   gap: 0.8rem;
-  align-items: stretch;
 }
 
 .answer-row input {
-  min-width: 0;
   flex: 1;
-  padding: 13px 14px;
+  min-width: 0;
   border: 2px solid rgba(127, 208, 255, 0.24);
-  border-radius: 12px 6px;
+  border-radius: 14px 6px;
+  padding: 0.9rem 1rem;
   color: #f2f8ff;
-  background: #10243a;
+  background: #081522;
   font: inherit;
   font-weight: 800;
   outline: none;
 }
 
-.answer-row input::placeholder {
-  color: #7c91a4;
-}
-
 .answer-row input:focus {
   border-color: #7fd0ff;
-  box-shadow: 0 0 0 3px rgba(127, 208, 255, 0.08);
 }
 
 .answer-row input:disabled {
-  opacity: 0.7;
-}
-
-.answer-row .main-button {
-  margin-top: 0;
-}
-
-.answer-row .main-button:disabled {
-  cursor: not-allowed;
-  opacity: 0.45;
-  transform: none;
-  box-shadow: none;
+  opacity: 0.65;
 }
 
 .attempt-note {
-  margin: 0.75rem 0 0;
-  color: #b8cad8;
+  margin: 0.7rem 0 0;
+  color: #9eb7ca;
   font-size: 0.9rem;
 }
 
 .answer-feedback {
   margin: 1rem 0 0;
-  font-weight: 900;
+  padding: 0.8rem;
+  border-radius: 12px 4px;
+  font-weight: 800;
 }
 
 .answer-feedback.correct {
-  color: #60dc96;
+  color: #bbf7d0;
+  border: 1px solid rgba(34, 197, 94, 0.35);
+  background: rgba(34, 197, 94, 0.12);
 }
 
 .answer-feedback.wrong {
-  color: #ff8a8a;
+  color: #fecdd3;
+  border: 1px solid rgba(239, 68, 68, 0.35);
+  background: rgba(239, 68, 68, 0.12);
 }
 
 .live-summary,
 .summary-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 0.9rem;
   margin-top: 1rem;
+}
+
+.summary-grid {
+  grid-template-columns: repeat(5, minmax(0, 1fr));
 }
 
 .live-summary div,
@@ -348,20 +370,30 @@
 }
 
 .main-button {
-  margin-top: 1.2rem;
+  position: relative;
+  isolation: isolate;
   padding: 13px 18px;
   border: 0;
-  border-radius: 10px 4px;
   color: #06101b;
-  background: linear-gradient(180deg, #b9ebff, #5ec0f2);
+  background: transparent;
+  font: inherit;
   font-weight: 900;
   text-transform: uppercase;
   cursor: pointer;
-  box-shadow: 0 6px 0 #255d84;
   transition:
     transform 0.15s ease,
-    box-shadow 0.15s ease,
     filter 0.15s ease;
+}
+
+.main-button::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: 10px 4px;
+  background: linear-gradient(180deg, #b9ebff, #5ec0f2);
+  box-shadow: 0 6px 0 #255d84;
+  transform: skewX(-12deg);
 }
 
 .main-button:hover:not(:disabled) {
@@ -370,24 +402,36 @@
 
 .main-button:active:not(:disabled) {
   transform: translateY(3px);
-  box-shadow: 0 3px 0 #255d84;
+}
+
+.main-button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
 }
 
 .save-status {
   margin: 1rem 0 0;
-  color: #dceeff;
+  padding: 0.75rem;
+  border: 1px solid rgba(127, 208, 255, 0.22);
+  border-radius: 12px 4px;
+  color: #d9e7f3;
+  background: rgba(127, 208, 255, 0.1);
   font-weight: 800;
 }
 
 .save-status.success {
-  color: #60dc96;
+  color: #bbf7d0;
+  border-color: rgba(34, 197, 94, 0.35);
+  background: rgba(34, 197, 94, 0.12);
 }
 
 .save-status.error {
-  color: #ff8a8a;
+  color: #fecdd3;
+  border-color: rgba(239, 68, 68, 0.35);
+  background: rgba(239, 68, 68, 0.12);
 }
 
-@media (max-width: 800px) {
+@media (max-width: 900px) {
   .own-game-header {
     flex-direction: column;
   }
@@ -396,29 +440,28 @@
     place-items: start;
   }
 
-  .clue-board,
+  .clue-board {
+    grid-template-columns: 1fr;
+  }
+
+  .live-summary,
+  .summary-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 640px) {
+  .game-status,
+  .answer-row {
+    flex-direction: column;
+  }
+
   .live-summary,
   .summary-grid {
     grid-template-columns: 1fr;
   }
 
-  .clue-tile {
-    min-height: auto;
-  }
-}
-
-@media (max-width: 640px) {
-  .answer-row {
-    flex-direction: column;
-  }
-
-  .symbol-frame,
-  .hidden-symbol {
-    width: 96px;
-    height: 96px;
-  }
-
-  .hidden-symbol {
-    font-size: 2.7rem;
+  .main-button {
+    width: 100%;
   }
 }

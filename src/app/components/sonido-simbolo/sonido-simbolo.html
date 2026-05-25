@@ -4,14 +4,13 @@
       <p class="section-kicker">Juego propio</p>
       <h2>Sonido o Símbolo</h2>
       <p>
-        Primero escuchá el sonido e intentá escribir la respuesta correcta. Si necesitás ayuda,
-        podés revelar un símbolo parcialmente oculto, pero el puntaje de esa ronda será menor.
-        Tenés un solo intento por ronda.
+        Escuchá el sonido, escribí la respuesta y, si necesitás ayuda, revelá el símbolo.
+        La ayuda visual reduce el puntaje de la ronda. Tenés un solo intento.
       </p>
     </div>
 
     <div class="score-card">
-      <span>Puntaje</span>
+      <span>Puntaje actual</span>
       <strong>{{ score() }}</strong>
     </div>
   </header>
@@ -46,7 +45,7 @@
 
         <div>
           <span>Tiempo</span>
-          <strong>{{ elapsedSeconds() }}s</strong>
+          <strong>{{ elapsedSeconds() }} s</strong>
         </div>
 
         <div>
@@ -67,15 +66,13 @@
         <p class="save-status error">{{ saveResultError() }}</p>
       }
 
-      <button type="button" class="main-button" (click)="startGame()">
-        Jugar otra vez
-      </button>
+      <button type="button" class="main-button" (click)="startGame()">Jugar otra vez</button>
     </section>
   } @else if (currentRound(); as round) {
     <section class="game-panel">
       <div class="game-status">
         <span>Ronda {{ currentRoundNumber() }} de {{ totalRounds() }}</span>
-        <span>{{ elapsedSeconds() }}s</span>
+        <span>{{ elapsedSeconds() }} s</span>
       </div>
 
       <section class="clue-board">
@@ -86,19 +83,36 @@
           [disabled]="selectedAnswer() !== null"
           (click)="playSound()"
         >
-          <span class="tile-label">Sonido</span>
-          <strong>{{ round.soundTitle }}</strong>
+        <span class="tile-label">Sonido</span>
 
-          @if (soundPlayed()) {
-            <p>{{ round.soundDescription }}</p>
-          } @else {
-            <p>Presioná para escuchar la pista sonora.</p>
-          }
+        <div class="sound-frame">
+        <strong>
+            @if (audioPlaying()) {
+            Reproduciendo...
+            } @else {
+            Reproducir sonido
+            }
+        </strong>
+
+        <span>
+            @if (audioPlaying()) {
+            El sonido se detendrá automáticamente.
+            } @else {
+            Tocá esta tarjeta para escuchar.
+            }
+        </span>
+        </div>
+
+        @if (soundPlayed()) {
+        <p>{{ round.soundDescription }}</p>
+        } @else {
+        <p>Escuchá el sonido y escribí la respuesta.</p>
+        }
+
+        <p class="attempt-note">El audio se reproduce durante 5 segundos como máximo.</p>
 
           @if (audioError()) {
-            <p class="asset-error">
-              No se pudo reproducir el sonido. Revisá que el archivo exista.
-            </p>
+            <p class="asset-error">No se pudo reproducir el sonido. Revisá que el archivo exista.</p>
           }
         </button>
 
@@ -116,7 +130,7 @@
               <img [src]="round.imageUrl" alt="Símbolo desbloqueado" />
             </div>
 
-            <p>{{ round.visualHelp }}</p>
+            <p>Usaste la ayuda visual. Esta ronda vale 10 puntos si respondés correctamente.</p>
           } @else {
             <div class="hidden-symbol covered">?</div>
             <p>Mostrar símbolo: la ronda pasa a valer 10 puntos.</p>
@@ -144,15 +158,11 @@
           </button>
         </div>
 
-        <p class="attempt-note">
-          Tenés un solo intento. Se aceptan respuestas sin tildes.
-        </p>
+        <p class="attempt-note">Tenés un solo intento. Se aceptan respuestas sin tildes.</p>
 
         @if (selectedAnswer(); as answer) {
           @if (answeredRounds()[answeredRounds().length - 1].wasCorrect) {
-            <p class="answer-feedback correct">
-              Correcto. La respuesta era {{ round.correctAnswer }}.
-            </p>
+            <p class="answer-feedback correct">Correcto. La respuesta era {{ round.correctAnswer }}.</p>
           } @else {
             <p class="answer-feedback wrong">
               Incorrecto. Tu respuesta fue “{{ answer }}”. La respuesta era {{ round.correctAnswer }}.
@@ -184,4 +194,4 @@
       </div>
     </section>
   }
-</section>
+</section>  
