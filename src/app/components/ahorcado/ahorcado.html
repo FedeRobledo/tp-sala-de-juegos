@@ -5,6 +5,7 @@
       <h2>Ahorcado Argentino</h2>
       <p class="game-description">
         Adiviná la palabra relacionada con historia, cultura o geografía argentina.
+        Elegí las letras desde el teclado visual antes de quedarte sin intentos.
       </p>
     </div>
 
@@ -13,7 +14,15 @@
 
   <div class="game-grid">
     <section class="hangman-card drawing-card">
-      <div class="hangman-drawing" [class.error-1]="errors() >= 1" [class.error-2]="errors() >= 2" [class.error-3]="errors() >= 3" [class.error-4]="errors() >= 4" [class.error-5]="errors() >= 5" [class.error-6]="errors() >= 6">
+      <div
+        class="hangman-drawing"
+        [class.error-1]="errors() >= 1"
+        [class.error-2]="errors() >= 2"
+        [class.error-3]="errors() >= 3"
+        [class.error-4]="errors() >= 4"
+        [class.error-5]="errors() >= 5"
+        [class.error-6]="errors() >= 6"
+      >
         <span class="base"></span>
         <span class="post"></span>
         <span class="beam"></span>
@@ -80,7 +89,7 @@
       </div>
 
       <div class="status-row">
-        <span>Puntaje estimado</span>
+        <span>Puntaje final</span>
         <strong>{{ score() }}</strong>
       </div>
     </aside>
@@ -88,7 +97,7 @@
 
   @if (showResultModal()) {
     <div class="modal-backdrop">
-      <section class="result-modal">
+      <section class="result-modal" [class.win]="won()" [class.lose]="!won()">
         <p class="modal-kicker">{{ won() ? 'Victoria' : 'Derrota' }}</p>
 
         <h3>
@@ -107,15 +116,15 @@
         </div>
 
         @if (savingResult()) {
-        <p class="save-status">Guardando resultado...</p>
+          <p class="save-status">Guardando resultado...</p>
         }
 
         @if (resultSaved()) {
-        <p class="save-status success">Resultado guardado correctamente.</p>
+          <p class="save-status success">Resultado guardado correctamente.</p>
         }
 
         @if (saveResultError()) {
-        <p class="save-status error">{{ saveResultError() }}</p>
+          <p class="save-status error">{{ saveResultError() }}</p>
         }
 
         <div class="modal-actions">

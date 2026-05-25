@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, computed, inject, signal } from '@angular/core';
+import { Component, OnDestroy, OnInit, computed, inject, signal } from '@angular/core';
 import { AuthService } from '../../services/auth';
 import { GameResultsService } from '../../services/game-results';
 
@@ -15,10 +15,12 @@ interface HangmanWord {
   templateUrl: './ahorcado.html',
   styleUrl: './ahorcado.css',
 })
-export class Ahorcado {
+export class Ahorcado implements OnInit, OnDestroy {
   readonly maxErrors = 6;
+
   private authService = inject(AuthService);
   private gameResultsService = inject(GameResultsService);
+  private timerId: ReturnType<typeof setInterval> | null = null;
 
   resultSaved = signal(false);
   savingResult = signal(false);
@@ -113,8 +115,7 @@ export class Ahorcado {
   gameFinished = signal(false);
   won = signal(false);
   showResultModal = signal(false);
-  startTime = signal(Date.now());
-  endTime = signal<number | null>(null);
+  timeSeconds = signal(0);
 
   displayedWord = computed(() => {
     const selected = this.selectedLetters();
@@ -130,11 +131,6 @@ export class Ahorcado {
 
   selectedCount = computed(() => this.selectedLetters().length);
 
-  timeSeconds = computed(() => {
-    const end = this.endTime() ?? Date.now();
-    return Math.floor((end - this.startTime()) / 1000);
-  });
-
   score = computed(() => {
     if (!this.won()) {
       return 0;
@@ -147,6 +143,14 @@ export class Ahorcado {
 
     return Math.max(baseScore - errorPenalty - letterPenalty - timePenalty, 10);
   });
+
+  ngOnInit(): void {
+    this.startTimer();
+  }
+
+  ngOnDestroy(): void {
+    this.stopTimer();
+  }
 
   selectLetter(letter: string): void {
     if (this.gameFinished() || this.selectedLetters().includes(letter)) {
@@ -171,66 +175,26 @@ export class Ahorcado {
   }
 
   newGame(): void {
+    this.stopTimer();
+
     this.currentWord.set(this.getRandomWord());
     this.selectedLetters.set([]);
     this.errors.set(0);
     this.gameFinished.set(false);
     this.won.set(false);
     this.showResultModal.set(false);
-    this.startTime.set(Date.now());
-    this.endTime.set(null);
+    this.timeSeconds.set(0);
+
     this.resultSaved.set(false);
     this.savingResult.set(false);
     this.saveResultError.set(null);
+
+    this.startTimer();
   }
 
   closeModal(): void {
     this.showResultModal.set(false);
   }
-
-  private async saveGameResult(): Promise<void> {
-  if (this.resultSaved() || this.savingResult()) {
-    return;
-  }
-
-  const user = this.authService.currentUser();
-
-  if (!user) {
-    this.saveResultError.set('No se pudo guardar el resultado porque no hay usuario logueado.');
-    return;
-  }
-
-  this.savingResult.set(true);
-  this.saveResultError.set(null);
-
-  const saved = await this.gameResultsService.saveResult({
-    userId: user.id,
-    userEmail: user.email ?? null,
-    userName: this.authService.userDisplayName(),
-    game: 'ahorcado',
-    score: this.score(),
-    timeSeconds: this.timeSeconds(),
-    won: this.won(),
-    details: {
-      word: this.currentWord().word,
-      hint: this.currentWord().hint,
-      category: this.currentWord().category,
-      selectedLetters: this.selectedLetters(),
-      selectedLettersCount: this.selectedLetters().length,
-      errors: this.errors(),
-      maxErrors: this.maxErrors,
-    },
-  });
-
-  this.savingResult.set(false);
-
-  if (!saved) {
-    this.saveResultError.set('La partida terminó, pero no se pudo guardar el resultado.');
-    return;
-  }
-
-  this.resultSaved.set(true);
-}
 
   private checkGameState(): void {
     const word = this.currentWord().word;
@@ -245,9 +209,69 @@ export class Ahorcado {
 
     this.gameFinished.set(true);
     this.won.set(completedWord);
-    this.endTime.set(Date.now());
     this.showResultModal.set(true);
+    this.stopTimer();
+
     void this.saveGameResult();
+  }
+
+  private async saveGameResult(): Promise<void> {
+    if (this.resultSaved() || this.savingResult()) {
+      return;
+    }
+
+    const user = this.authService.currentUser();
+
+    if (!user) {
+      this.saveResultError.set('No se pudo guardar el resultado porque no hay usuario logueado.');
+      return;
+    }
+
+    this.savingResult.set(true);
+    this.saveResultError.set(null);
+
+    const saved = await this.gameResultsService.saveResult({
+      userId: user.id,
+      userEmail: user.email ?? null,
+      userName: this.authService.userDisplayName(),
+      game: 'ahorcado',
+      score: this.score(),
+      timeSeconds: this.timeSeconds(),
+      won: this.won(),
+      details: {
+        word: this.currentWord().word,
+        hint: this.currentWord().hint,
+        category: this.currentWord().category,
+        selectedLetters: this.selectedLetters(),
+        selectedLettersCount: this.selectedLetters().length,
+        errors: this.errors(),
+        maxErrors: this.maxErrors,
+      },
+    });
+
+    this.savingResult.set(false);
+
+    if (!saved) {
+      this.saveResultError.set('La partida terminó, pero no se pudo guardar el resultado.');
+      return;
+    }
+
+    this.resultSaved.set(true);
+  }
+
+  private startTimer(): void {
+    this.timerId = setInterval(() => {
+      this.timeSeconds.update((seconds) => seconds + 1);
+    }, 1000);
+  }
+
+  private stopTimer(): void {
+    if (!this.timerId) {
+      return;
+    }
+
+    clearInterval(this.timerId);
+    this.timerId = null;
   }
 
   private getRandomWord(): HangmanWord {
