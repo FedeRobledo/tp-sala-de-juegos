@@ -34,9 +34,9 @@ export class Juegos {
     {
       title: 'Preguntados',
       description:
-        'Juego de preguntas y respuestas que se incorporará en una próxima etapa del proyecto.',
-      route: '/juegos',
-      status: 'coming-soon',
+        'Respondé preguntas de cultura general obtenidas desde una API externa y sumá puntos por cada acierto.',
+      route: '/juegos/preguntados',
+      status: 'available',
     },
     {
       title: 'Sonido o Símbolo',

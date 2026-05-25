@@ -1,0 +1,113 @@
+<section class="trivia-page">
+  <header class="trivia-header">
+    <div>
+      <p class="section-kicker">Preguntados</p>
+      <h2>Respondé las preguntas</h2>
+      <p>
+        Elegí una opción por ronda. Las preguntas se obtienen desde una API externa y el
+        resultado final se calcula según tus respuestas correctas.
+      </p>
+    </div>
+
+    <div class="score-card">
+      <span>Puntaje</span>
+      <strong>{{ score() }}</strong>
+    </div>
+  </header>
+
+  @if (loading()) {
+    <section class="state-card">
+      <h3>Cargando preguntas...</h3>
+      <p>Estamos preparando una partida nueva.</p>
+    </section>
+  } @else if (errorMessage()) {
+    <section class="state-card">
+      <h3>No se pudo iniciar la partida</h3>
+      <p>{{ errorMessage() }}</p>
+
+      <button type="button" class="main-button" (click)="restartGame()">
+        Intentar nuevamente
+      </button>
+    </section>
+  } @else if (finished()) {
+    <section class="result-card" [class.win]="won()" [class.lose]="!won()">
+      <p class="section-kicker">Partida finalizada</p>
+
+      @if (won()) {
+        <h3>¡Buen resultado!</h3>
+        <p>Superaste la partida respondiendo correctamente la mayoría de las preguntas.</p>
+      } @else {
+        <h3>Partida terminada</h3>
+        <p>No alcanzaste la cantidad necesaria de respuestas correctas. Podés volver a intentarlo.</p>
+      }
+
+      <div class="summary-grid">
+        <div>
+          <span>Correctas</span>
+          <strong>{{ correctAnswers() }}</strong>
+        </div>
+
+        <div>
+          <span>Incorrectas</span>
+          <strong>{{ wrongAnswers() }}</strong>
+        </div>
+
+        <div>
+          <span>Tiempo</span>
+          <strong>{{ elapsedSeconds() }}s</strong>
+        </div>
+
+        <div>
+          <span>Puntaje</span>
+          <strong>{{ score() }}</strong>
+        </div>
+      </div>
+
+      <button type="button" class="main-button" (click)="restartGame()">
+        Jugar otra vez
+      </button>
+    </section>
+  } @else if (currentQuestion(); as question) {
+    <section class="game-panel">
+      <div class="game-status">
+        <span>Pregunta {{ currentQuestionNumber() }} de {{ totalQuestions() }}</span>
+        <span>{{ elapsedSeconds() }}s</span>
+      </div>
+
+      <div class="question-card">
+        <div class="question-meta">
+          <span>{{ question.category }}</span>
+          <span>{{ question.difficulty }}</span>
+        </div>
+
+        <h3>{{ question.question }}</h3>
+      </div>
+
+      <div class="options-grid">
+        @for (option of question.options; track option) {
+          <button
+            type="button"
+            class="option-button"
+            [ngClass]="getOptionClass(option)"
+            [disabled]="selectedOption() !== null"
+            (click)="selectOption(option)"
+          >
+            {{ option }}
+          </button>
+        }
+      </div>
+
+      <div class="live-summary">
+        <div>
+          <span>Correctas</span>
+          <strong>{{ correctAnswers() }}</strong>
+        </div>
+
+        <div>
+          <span>Incorrectas</span>
+          <strong>{{ wrongAnswers() }}</strong>
+        </div>
+      </div>
+    </section>
+  }
+</section>

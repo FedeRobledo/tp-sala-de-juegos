@@ -12,6 +12,7 @@ import { Ahorcado } from './components/ahorcado/ahorcado';
 import { MayorMenor } from './components/mayor-menor/mayor-menor';
 import { Chat } from './components/chat/chat';
 import { Juegos } from './components/juegos/juegos';
+import { Preguntados } from './components/preguntados/preguntados';
 
 export const routes: Routes = [
   {
@@ -31,6 +32,11 @@ export const routes: Routes = [
       {
         path: 'juegos/mayor-menor',
         component: MayorMenor,
+        canActivate: [authGuard],
+      },
+      {
+        path: 'juegos/preguntados',
+        component: Preguntados,
         canActivate: [authGuard],
       },
       {
