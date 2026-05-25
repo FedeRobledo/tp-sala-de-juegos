@@ -1,5 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnDestroy, OnInit, computed, inject, signal } from '@angular/core';
+import { AuthService } from '../../services/auth';
+import { GameResultsService } from '../../services/game-results';
 import { QuestionsService, TriviaQuestion } from '../../services/questions';
 
 @Component({
@@ -10,6 +12,9 @@ import { QuestionsService, TriviaQuestion } from '../../services/questions';
 })
 export class Preguntados implements OnInit, OnDestroy {
   private questionsService = inject(QuestionsService);
+  private authService = inject(AuthService);
+  private gameResultsService = inject(GameResultsService);
+
   private timerId: ReturnType<typeof setInterval> | null = null;
 
   questions = signal<TriviaQuestion[]>([]);
@@ -24,6 +29,21 @@ export class Preguntados implements OnInit, OnDestroy {
   wrongAnswers = signal(0);
   elapsedSeconds = signal(0);
 
+  resultSaved = signal(false);
+  savingResult = signal(false);
+  saveResultError = signal<string | null>(null);
+
+  answeredQuestions = signal<
+    {
+      question: string;
+      category: string;
+      difficulty: string;
+      selectedAnswer: string;
+      correctAnswer: string;
+      wasCorrect: boolean;
+    }[]
+  >([]);
+
   currentQuestion = computed(() => this.questions()[this.currentIndex()] ?? null);
 
   totalQuestions = computed(() => this.questions().length);
@@ -36,12 +56,17 @@ export class Preguntados implements OnInit, OnDestroy {
     return this.currentIndex() + 1;
   });
 
-  score = computed(() => this.correctAnswers() * 10);
+  score = computed(() => {
+    const base = this.correctAnswers() * 10;
+    const timePenalty = Math.floor(this.elapsedSeconds() / 20);
+
+    return Math.max(base - timePenalty, 0);
+  });
 
   won = computed(() => this.correctAnswers() >= 6);
 
   ngOnInit(): void {
-    this.startGame();
+    void this.startGame();
   }
 
   ngOnDestroy(): void {
@@ -59,6 +84,10 @@ export class Preguntados implements OnInit, OnDestroy {
     this.correctAnswers.set(0);
     this.wrongAnswers.set(0);
     this.elapsedSeconds.set(0);
+    this.resultSaved.set(false);
+    this.savingResult.set(false);
+    this.saveResultError.set(null);
+    this.answeredQuestions.set([]);
 
     const questions = await this.questionsService.getTriviaQuestions();
 
@@ -81,13 +110,27 @@ export class Preguntados implements OnInit, OnDestroy {
       return;
     }
 
+    const wasCorrect = option === question.correctAnswer;
+
     this.selectedOption.set(option);
 
-    if (option === question.correctAnswer) {
+    if (wasCorrect) {
       this.correctAnswers.update((value) => value + 1);
     } else {
       this.wrongAnswers.update((value) => value + 1);
     }
+
+    this.answeredQuestions.update((answers) => [
+      ...answers,
+      {
+        question: question.question,
+        category: question.category,
+        difficulty: question.difficulty,
+        selectedAnswer: option,
+        correctAnswer: question.correctAnswer,
+        wasCorrect,
+      },
+    ]);
 
     setTimeout(() => {
       this.goToNextQuestion();
@@ -132,6 +175,49 @@ export class Preguntados implements OnInit, OnDestroy {
   private finishGame(): void {
     this.finished.set(true);
     this.stopTimer();
+    void this.saveGameResult();
+  }
+
+  private async saveGameResult(): Promise<void> {
+    if (this.resultSaved() || this.savingResult()) {
+      return;
+    }
+
+    const user = this.authService.currentUser();
+
+    if (!user) {
+      this.saveResultError.set('No se pudo guardar el resultado porque no hay usuario logueado.');
+      return;
+    }
+
+    this.savingResult.set(true);
+    this.saveResultError.set(null);
+
+    const saved = await this.gameResultsService.saveResult({
+      userId: user.id,
+      userEmail: user.email ?? null,
+      userName: this.authService.userDisplayName(),
+      game: 'preguntados',
+      score: this.score(),
+      timeSeconds: this.elapsedSeconds(),
+      won: this.won(),
+      details: {
+        totalQuestions: this.totalQuestions(),
+        correctAnswers: this.correctAnswers(),
+        wrongAnswers: this.wrongAnswers(),
+        answeredQuestions: this.answeredQuestions(),
+        source: 'Open Trivia DB',
+      },
+    });
+
+    this.savingResult.set(false);
+
+    if (!saved) {
+      this.saveResultError.set('La partida terminó, pero no se pudo guardar el resultado.');
+      return;
+    }
+
+    this.resultSaved.set(true);
   }
 
   private startTimer(): void {

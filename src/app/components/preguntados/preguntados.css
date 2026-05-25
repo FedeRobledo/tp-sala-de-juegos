@@ -252,3 +252,17 @@
     grid-template-columns: 1fr;
   }
 }
+
+.save-status {
+  margin: 1rem 0 0;
+  color: #dceeff;
+  font-weight: 800;
+}
+
+.save-status.success {
+  color: #60dc96;
+}
+
+.save-status.error {
+  color: #ff8a8a;
+}
