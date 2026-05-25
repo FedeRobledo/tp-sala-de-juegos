@@ -1,0 +1,234 @@
+:host {
+  display: block;
+}
+
+.games-page {
+  display: grid;
+  gap: 1.5rem;
+  color: #f2f8ff;
+}
+
+.games-hero {
+  position: relative;
+  overflow: hidden;
+  padding: clamp(1.5rem, 4vw, 2.5rem);
+  border: 2px solid rgba(127, 208, 255, 0.28);
+  border-radius: 30px 10px 30px 10px;
+  background:
+    radial-gradient(circle at right top, rgba(127, 208, 255, 0.18), transparent 34%),
+    linear-gradient(180deg, rgba(16, 36, 58, 0.98), rgba(7, 17, 29, 0.98));
+  box-shadow:
+    0 22px 40px rgba(0, 0, 0, 0.34),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+}
+
+.games-hero::before {
+  content: '';
+  position: absolute;
+  left: 24px;
+  right: 24px;
+  top: -4px;
+  height: 7px;
+  background: linear-gradient(90deg, transparent, #7fd0ff, transparent);
+  opacity: 0.7;
+}
+
+.section-kicker {
+  display: inline-flex;
+  margin: 0 0 0.9rem;
+  padding: 7px 12px;
+  border: 1px solid rgba(247, 200, 66, 0.36);
+  color: #ffeaa0;
+  background: rgba(247, 200, 66, 0.08);
+  font-size: 12px;
+  font-weight: 900;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  clip-path: polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%);
+}
+
+.games-hero h2 {
+  margin: 0;
+  font-size: clamp(2.2rem, 5vw, 4rem);
+  line-height: 0.95;
+  text-transform: uppercase;
+  font-weight: 900;
+  letter-spacing: -1px;
+  text-shadow: 0 4px 0 rgba(0, 0, 0, 0.36);
+}
+
+.games-hero p:not(.section-kicker) {
+  max-width: 740px;
+  margin: 1rem 0 0;
+  color: #dceeff;
+  font-size: 1rem;
+  line-height: 1.6;
+}
+
+.games-section {
+  display: grid;
+  gap: 1rem;
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.section-title h3 {
+  margin: 0;
+  color: #7fd0ff;
+  font-size: 1.15rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  white-space: nowrap;
+}
+
+.title-line {
+  height: 1px;
+  flex: 1;
+  background: linear-gradient(90deg, transparent, rgba(127, 208, 255, 0.45), transparent);
+}
+
+.games-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.game-card {
+  position: relative;
+  min-height: 220px;
+  display: grid;
+  grid-template-columns: 88px 1fr;
+  gap: 1rem;
+  align-items: center;
+  padding: 1.25rem;
+  overflow: hidden;
+  border: 2px solid rgba(202, 239, 255, 0.22);
+  border-radius: 34px 16px 34px 16px;
+  color: #f2f8ff;
+  background: linear-gradient(180deg, #10243a, #081522);
+  text-decoration: none;
+  box-shadow:
+    0 22px 32px rgba(0, 0, 0, 0.28),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+  transition:
+    transform 0.22s ease,
+    border-color 0.22s ease,
+    filter 0.22s ease;
+}
+
+.game-card::before {
+  content: '';
+  position: absolute;
+  inset: auto 18px -4px 18px;
+  height: 7px;
+  background: linear-gradient(90deg, transparent, rgba(127, 208, 255, 0.85), transparent);
+  opacity: 0.45;
+}
+
+.available-card:hover {
+  transform: translateY(-4px);
+  border-color: #7fd0ff;
+  filter: brightness(1.08);
+}
+
+.game-icon {
+  width: 76px;
+  height: 76px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  color: #06101b;
+  background:
+    radial-gradient(circle, #ffffff 0 34%, #80d1ff 35% 72%, #092037 73% 100%);
+  font-size: 2.2rem;
+  box-shadow:
+    0 0 0 5px rgba(127, 208, 255, 0.08),
+    0 10px 18px rgba(0, 0, 0, 0.35);
+}
+
+.game-content {
+  min-width: 0;
+}
+
+.game-status {
+  display: inline-flex;
+  margin-bottom: 0.6rem;
+  padding: 5px 10px;
+  border: 1px solid #2f5879;
+  color: #7fd0ff;
+  background: #06101b;
+  font-size: 11px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+.game-content h4 {
+  margin: 0;
+  font-size: 1.45rem;
+  font-weight: 900;
+}
+
+.game-content p {
+  margin: 0.55rem 0 0;
+  color: #d6e4f0;
+  line-height: 1.55;
+}
+
+.play-chip {
+  position: absolute;
+  right: 1rem;
+  bottom: 1rem;
+  min-width: 110px;
+  padding: 10px 12px;
+  text-align: center;
+  color: #06101b;
+  background: #8fd7ff;
+  font-size: 12px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  clip-path: polygon(9px 0, 100% 0, calc(100% - 9px) 100%, 0 100%);
+}
+
+.play-chip.disabled {
+  color: #aeb7bf;
+  background: #3a4652;
+}
+
+.locked-card {
+  opacity: 0.58;
+  filter: grayscale(0.35);
+}
+
+@media (max-width: 900px) {
+  .games-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .game-card {
+    min-height: 200px;
+  }
+}
+
+@media (max-width: 620px) {
+  .game-card {
+    grid-template-columns: 1fr;
+  }
+
+  .game-icon {
+    width: 64px;
+    height: 64px;
+    font-size: 1.9rem;
+  }
+
+  .play-chip {
+    position: static;
+    margin-top: 1rem;
+    width: fit-content;
+  }
+}

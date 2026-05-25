@@ -1,89 +1,62 @@
-<div class="game-layout" [class.sidebar-collapsed]="!sidebarOpen()">
-  <aside class="sidebar">
-    <div class="sidebar-header">
-      <button
-        class="menu-toggle"
-        type="button"
-        (click)="toggleSidebar()"
-        aria-label="Abrir o cerrar menú"
-      >
-        ☰
-      </button>
-
-      @if (sidebarOpen()) {
-        <div class="brand">
-          <span class="brand-kicker">UTN Gaming</span>
-          <strong>Sala de Juegos</strong>
-        </div>
-      }
+<div class="game-layout">
+  <header class="top-island">
+    <a routerLink="/home" class="brand" aria-label="Ir al inicio">
+    <div class="brand-logo-wrap">
+      <img src="/escarapela.ico" alt="Escarapela argentina" class="brand-logo" />
     </div>
 
-    <nav class="sidebar-nav" aria-label="Navegación principal">
+      <div>
+        <h1>Sala <span>Argentina</span></h1>
+        <p>Juegos educativos · Programación IV</p>
+      </div>
+    </a>
+
+    <nav class="nav-ribbon" aria-label="Navegación principal">
       @for (item of visibleMenuItems(); track item.label) {
         <a
           [routerLink]="item.route"
           routerLinkActive="active"
           [routerLinkActiveOptions]="{ exact: item.route === '/home' || item.route === '/juegos' }"
-          class="nav-item"
         >
-          <span class="nav-icon">{{ item.icon }}</span>
-
-          @if (sidebarOpen()) {
-            <span class="nav-label">{{ item.label }}</span>
-          }
+          <span>{{ item.icon }}</span>
+          {{ item.label }}
         </a>
       }
     </nav>
 
-    @if (sidebarOpen()) {
-      <div class="sidebar-footer">
-        <span class="status-dot"></span>
+    <div class="user-plate">
+      @if (authService.isLoggedIn()) {
+        <div class="avatar-coin">
+          {{ authService.userDisplayName().charAt(0).toUpperCase() }}
+        </div>
 
-        @if (authService.isLoggedIn()) {
-          <span>Sprint 3 · sesión activa</span>
-        } @else {
+        <div class="user-copy">
+          <strong>{{ authService.userDisplayName() }}</strong>
+          <span>Sesión iniciada</span>
+        </div>
+
+        <button
+          type="button"
+          class="exit-btn"
+          [disabled]="authService.loading()"
+          (click)="logout()"
+        >
+          Salir
+        </button>
+      } @else {
+        <div class="avatar-coin">?</div>
+
+        <div class="user-copy">
+          <strong>Invitado</strong>
           <span>Iniciá sesión para jugar</span>
-        }
-      </div>
-    }
-  </aside>
+        </div>
 
-  <section class="content-area">
-    <header class="topbar">
-      <div>
-        <p class="topbar-kicker">Programación IV · UTN</p>
-        <h1>Sala de Juegos</h1>
-      </div>
+        <a routerLink="/login" class="exit-btn login-btn">Entrar</a>
+      }
+    </div>
+  </header>
 
-      <div class="auth-actions">
-        @if (authService.isLoggedIn()) {
-          <div class="user-pill">
-            <span class="user-icon">👤</span>
-            <span>{{ authService.userDisplayName() }}</span>
-          </div>
-
-          <button
-            type="button"
-            class="auth-link logout"
-            [disabled]="authService.loading()"
-            (click)="logout()"
-          >
-            Cerrar sesión
-          </button>
-        } @else {
-          <a routerLink="/login" routerLinkActive="active" class="auth-link secondary">
-            Iniciar sesión
-          </a>
-
-          <a routerLink="/register" routerLinkActive="active" class="auth-link primary">
-            Registrarme
-          </a>
-        }
-      </div>
-    </header>
-
-    <main class="page-content">
-      <router-outlet></router-outlet>
-    </main>
-  </section>
+  <main class="page-content">
+    <router-outlet></router-outlet>
+  </main>
 </div>
