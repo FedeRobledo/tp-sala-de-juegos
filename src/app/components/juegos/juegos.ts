@@ -41,9 +41,9 @@ export class Juegos {
     {
       title: 'Sonido o Símbolo',
       description:
-        'Juego propio con referencias argentinas, sonidos, símbolos y desafíos visuales.',
-      route: '/juegos',
-      status: 'coming-soon',
+        'Leé pistas sobre sonidos, símbolos, lugares y costumbres argentinas, y elegí la referencia correcta.',
+      route: '/juegos/sonido-simbolo',
+      status: 'available',
     },
   ];
 

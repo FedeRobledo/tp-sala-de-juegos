@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { SupabaseService } from './supabase';
 
-export type GameName = 'ahorcado' | 'mayor-menor' | 'preguntados' | 'juego-propio';
+export type GameName = 'ahorcado' | 'mayor-menor' | 'preguntados' | 'sonido-simbolo'
 
 export interface GameResult {
   id?: string;

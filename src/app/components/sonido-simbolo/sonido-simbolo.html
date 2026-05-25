@@ -1,0 +1,154 @@
+<section class="own-game-page">
+  <header class="own-game-header">
+    <div>
+      <p class="section-kicker">Juego propio</p>
+      <h2>Sonido o Símbolo</h2>
+      <p>
+        Primero escuchá el sonido y elegí la respuesta correcta. Si necesitás ayuda,
+        podés revelar una imagen parcialmente oculta, pero el puntaje de esa ronda será menor.
+      </p>
+    </div>
+
+    <div class="score-card">
+      <span>Puntaje</span>
+      <strong>{{ score() }}</strong>
+    </div>
+  </header>
+
+  @if (finished()) {
+    <section class="result-card" [class.win]="won()" [class.lose]="!won()">
+      <p class="section-kicker">Partida finalizada</p>
+
+      @if (won()) {
+        <h3>¡Buen reconocimiento argentino!</h3>
+        <p>Superaste el desafío reconociendo la mayoría de los sonidos o símbolos.</p>
+      } @else {
+        <h3>Desafío terminado</h3>
+        <p>No alcanzaste la cantidad necesaria de aciertos, pero podés volver a intentarlo.</p>
+      }
+
+      <div class="summary-grid">
+        <div>
+          <span>Correctas</span>
+          <strong>{{ correctAnswers() }}</strong>
+        </div>
+
+        <div>
+          <span>Incorrectas</span>
+          <strong>{{ wrongAnswers() }}</strong>
+        </div>
+
+        <div>
+          <span>Ayudas usadas</span>
+          <strong>{{ usedHelps() }}</strong>
+        </div>
+
+        <div>
+          <span>Tiempo</span>
+          <strong>{{ elapsedSeconds() }}s</strong>
+        </div>
+
+        <div>
+          <span>Puntaje</span>
+          <strong>{{ score() }}</strong>
+        </div>
+      </div>
+
+      @if (savingResult()) {
+        <p class="save-status">Guardando resultado...</p>
+      }
+
+      @if (resultSaved()) {
+        <p class="save-status success">Resultado guardado correctamente.</p>
+      }
+
+      @if (saveResultError()) {
+        <p class="save-status error">{{ saveResultError() }}</p>
+      }
+
+      <button type="button" class="main-button" (click)="startGame()">
+        Jugar otra vez
+      </button>
+    </section>
+  } @else if (currentRound(); as round) {
+    <section class="game-panel">
+      <div class="game-status">
+        <span>Ronda {{ currentRoundNumber() }} de {{ totalRounds() }}</span>
+        <span>{{ elapsedSeconds() }}s</span>
+      </div>
+
+      <section class="clue-board">
+        <button
+          type="button"
+          class="clue-tile"
+          [class.revealed]="soundPlayed()"
+          [disabled]="selectedOption() !== null"
+          (click)="playSound()"
+        >
+          <span class="tile-label">Sonido</span>
+          <strong>{{ round.soundTitle }}</strong>
+
+          @if (soundPlayed()) {
+            <p>{{ round.soundDescription }}</p>
+          } @else {
+            <p>Presioná para escuchar la pista sonora.</p>
+          }
+        </button>
+
+        <button
+          type="button"
+          class="clue-tile visual-tile"
+          [class.revealed]="visualHelpUsed()"
+          [disabled]="visualHelpUsed() || selectedOption() !== null"
+          (click)="useVisualHelp()"
+        >
+          <span class="tile-label">Simbolo</span>
+
+          @if (visualHelpUsed()) {
+            <div class="hidden-symbol">{{ round.hiddenImageMock }}</div>
+            <p>{{ round.visualHelp }}</p>
+          } @else {
+            <div class="hidden-symbol covered">?</div>
+            <p>Revelar simbolo: la ronda pasa a valer 10 puntos.</p>
+          }
+        </button>
+      </section>
+
+      <div class="options-grid three-options">
+        @for (option of round.options; track option) {
+          <button
+            type="button"
+            class="option-button"
+            [ngClass]="getOptionClass(option)"
+            [disabled]="selectedOption() !== null"
+            (click)="selectOption(option)"
+          >
+            {{ option }}
+          </button>
+        }
+      </div>
+
+      <div class="live-summary">
+        <div>
+          <span>Correctas</span>
+          <strong>{{ correctAnswers() }}</strong>
+        </div>
+
+        <div>
+          <span>Ayudas</span>
+          <strong>{{ usedHelps() }}</strong>
+        </div>
+
+        <div>
+          <span>Sin ayuda</span>
+          <strong>20 pts</strong>
+        </div>
+
+        <div>
+          <span>Con ayuda</span>
+          <strong>10 pts</strong>
+        </div>
+      </div>
+    </section>
+  }
+</section>

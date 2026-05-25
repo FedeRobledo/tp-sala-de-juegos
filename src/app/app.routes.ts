@@ -13,6 +13,8 @@ import { MayorMenor } from './components/mayor-menor/mayor-menor';
 import { Chat } from './components/chat/chat';
 import { Juegos } from './components/juegos/juegos';
 import { Preguntados } from './components/preguntados/preguntados';
+import { SonidoSimbolo } from './components/sonido-simbolo/sonido-simbolo';
+import { Resultados } from './components/resultados/resultados';
 
 export const routes: Routes = [
   {
@@ -40,6 +42,11 @@ export const routes: Routes = [
         canActivate: [authGuard],
       },
       {
+        path: 'juegos/sonido-simbolo',
+        component: SonidoSimbolo,
+        canActivate: [authGuard],
+      },
+      {
         path: 'juegos',
         component: Juegos,
         canActivate: [authGuard],
@@ -51,14 +58,8 @@ export const routes: Routes = [
       },
       {
         path: 'resultados',
-        component: Proximamente,
+        component: Resultados,
         canActivate: [authGuard],
-        data: {
-          titulo: 'Resultados',
-          icono: '🏆',
-          descripcion:
-            'Los listados de resultados se completarán cuando los juegos registren estadísticas en la base de datos.',
-        },
       },
     ],
   },

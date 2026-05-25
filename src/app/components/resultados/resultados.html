@@ -1,0 +1,95 @@
+<section class="results-page">
+  <header class="results-hero">
+    <div>
+      <p class="section-kicker">Resultados</p>
+      <h2>Ranking de jugadores</h2>
+      <p>
+        Consultá los resultados guardados en Supabase para cada juego de la sala.
+        Las tablas se ordenan por mejor puntaje y menor tiempo.
+      </p>
+    </div>
+
+    <div class="total-card">
+      <span>Partidas registradas</span>
+      <strong>{{ totalResults() }}</strong>
+    </div>
+  </header>
+
+  @if (loading()) {
+    <section class="state-card">
+      <h3>Cargando resultados...</h3>
+      <p>Estamos consultando las partidas registradas.</p>
+    </section>
+  } @else if (errorMessage()) {
+    <section class="state-card">
+      <h3>No se pudieron cargar los resultados</h3>
+      <p>{{ errorMessage() }}</p>
+
+      <button type="button" class="main-button" (click)="loadResults()">
+        Intentar nuevamente
+      </button>
+    </section>
+  } @else {
+    <section class="tables-list">
+      @for (table of tables(); track table.game) {
+        <article class="result-table-card">
+          <div class="table-header">
+            <div>
+              <span class="game-key">{{ table.game }}</span>
+              <h3>{{ table.title }}</h3>
+              <p>{{ table.description }}</p>
+            </div>
+
+            <div class="count-pill">
+              {{ table.results.length }} partidas
+            </div>
+          </div>
+
+          @if (table.results.length === 0) {
+            <div class="empty-state">
+              Todavía no hay resultados guardados para este juego.
+            </div>
+          } @else {
+            <div class="table-wrapper">
+              <table>
+                <thead>
+                  <tr>
+                    <th>#</th>
+                    <th>Jugador</th>
+                    <th>Puntaje</th>
+                    <th>Tiempo</th>
+                    <th>Resultado</th>
+                    <th>Detalle</th>
+                    <th>Fecha</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  @for (result of table.results; track result.id; let index = $index) {
+                    <tr>
+                      <td class="position">{{ index + 1 }}</td>
+                      <td>{{ getPlayerName(result) }}</td>
+                      <td>
+                        <strong>{{ result.score }}</strong>
+                      </td>
+                      <td>{{ result.time_seconds }}s</td>
+                      <td>
+                        <span class="result-badge" [class.win]="result.won" [class.lose]="!result.won">
+                          {{ getResultLabel(result) }}
+                        </span>
+                      </td>
+                      <td class="details-cell">
+                        {{ formatDetails(result, table.game) }}
+                      </td>
+                      <td>{{ formatDate(result.created_at) }}</td>
+                    </tr>
+                  }
+                </tbody>
+              </table>
+            </div>
+          }
+        </article>
+      }
+    </section>
+  }
+</section>
