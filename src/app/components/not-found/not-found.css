@@ -1,25 +1,90 @@
-.page-card {
-  background-color: #ffffff;
-  border-radius: 12px;
-  padding: 2rem;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+.not-found-page {
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  padding: 1.5rem;
+  background:
+    radial-gradient(circle at top left, rgba(56, 189, 248, 0.18), transparent 30%),
+    radial-gradient(circle at bottom right, rgba(250, 204, 21, 0.12), transparent 28%),
+    #08111f;
+  color: #f8fafc;
 }
 
-.not-found {
+.not-found-card {
+  width: min(100%, 680px);
+  padding: clamp(1.5rem, 5vw, 2.6rem);
+  border-radius: 32px;
+  border: 1px solid rgba(125, 211, 252, 0.28);
+  background:
+    radial-gradient(circle at top right, rgba(250, 204, 21, 0.14), transparent 34%),
+    rgba(15, 23, 42, 0.86);
+  box-shadow: 0 24px 80px rgba(0, 0, 0, 0.34);
   text-align: center;
 }
 
-.not-found h2 {
-  margin-top: 0;
-  color: #b91c1c;
+.not-found-logo {
+  width: min(180px, 55vw);
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 0 30px rgba(56, 189, 248, 0.36));
 }
 
-.not-found a {
-  display: inline-block;
-  margin-top: 1rem;
+.eyebrow {
+  margin: 1rem 0 0.55rem;
+  color: #facc15;
+  font-size: 0.78rem;
+  font-weight: 900;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+h2 {
+  margin: 0;
+  font-size: clamp(2.2rem, 6vw, 4.5rem);
+  line-height: 1;
+}
+
+p {
+  max-width: 520px;
+  margin: 1rem auto 0;
+  color: #cbd5e1;
+  line-height: 1.7;
+}
+
+.actions {
+  display: flex;
+  justify-content: center;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+  margin-top: 1.5rem;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 46px;
+  padding: 0.8rem 1.05rem;
+  border-radius: 999px;
+  font-weight: 900;
   text-decoration: none;
-  background-color: #1e3a8a;
-  color: #ffffff;
-  padding: 0.7rem 1rem;
-  border-radius: 8px;
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+}
+
+.btn.primary {
+  color: #08111f;
+  background: linear-gradient(135deg, #7dd3fc, #facc15);
+  box-shadow: 0 12px 30px rgba(56, 189, 248, 0.22);
+}
+
+.btn.secondary {
+  color: #e0f2fe;
+  border: 1px solid rgba(125, 211, 252, 0.4);
+  background: rgba(15, 23, 42, 0.7);
 }

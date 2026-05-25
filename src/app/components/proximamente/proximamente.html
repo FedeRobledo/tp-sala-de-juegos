@@ -1,0 +1,21 @@
+<section class="coming-card">
+  <div class="coming-icon">{{ icono() }}</div>
+
+  <p class="eyebrow">Acceso protegido</p>
+
+  <h2>{{ titulo() }}</h2>
+
+  <p class="description">
+    {{ descripcion() }}
+  </p>
+
+  <div class="session-box">
+    <span class="status-dot"></span>
+    <span>{{ mensajeUsuario() }}</span>
+  </div>
+
+  <div class="actions">
+    <a routerLink="/home" class="btn primary">Volver al Home</a>
+    <a routerLink="/quien-soy" class="btn secondary">Ver Quién soy</a>
+  </div>
+</section>

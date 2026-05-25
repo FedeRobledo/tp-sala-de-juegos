@@ -1,3 +1,84 @@
-<div class="container">
-  <router-outlet></router-outlet>
+<div class="game-layout" [class.sidebar-collapsed]="!sidebarOpen()">
+  <aside class="sidebar">
+    <div class="sidebar-header">
+      <button
+        class="menu-toggle"
+        type="button"
+        (click)="toggleSidebar()"
+        aria-label="Abrir o cerrar menú"
+      >
+        ☰
+      </button>
+
+      @if (sidebarOpen()) {
+        <div class="brand">
+          <span class="brand-kicker">UTN Gaming</span>
+          <strong>Sala de Juegos</strong>
+        </div>
+      }
+    </div>
+
+    <nav class="sidebar-nav" aria-label="Navegación principal">
+      @for (item of menuItems; track item.label) {
+        <a
+          [routerLink]="item.route"
+          routerLinkActive="active"
+          [routerLinkActiveOptions]="{ exact: item.route === '/home' }"
+          class="nav-item"
+        >
+          <span class="nav-icon">{{ item.icon }}</span>
+
+          @if (sidebarOpen()) {
+            <span class="nav-label">{{ item.label }}</span>
+          }
+        </a>
+      }
+    </nav>
+
+    @if (sidebarOpen()) {
+      <div class="sidebar-footer">
+        <span class="status-dot"></span>
+        <span>Sprint 2 en desarrollo</span>
+      </div>
+    }
+  </aside>
+
+  <section class="content-area">
+    <header class="topbar">
+      <div>
+        <p class="topbar-kicker">Programación IV · UTN</p>
+        <h1>Sala de Juegos</h1>
+      </div>
+
+      <div class="auth-actions">
+        @if (authService.isLoggedIn()) {
+          <div class="user-pill">
+            <span class="user-icon">👤</span>
+            <span>{{ authService.userDisplayName() }}</span>
+          </div>
+
+          <button
+            type="button"
+            class="auth-link logout"
+            [disabled]="authService.loading()"
+            (click)="logout()"
+          >
+            Cerrar sesión
+          </button>
+        } @else {
+          <a routerLink="/login" routerLinkActive="active" class="auth-link secondary">
+            Iniciar sesión
+          </a>
+
+          <a routerLink="/register" routerLinkActive="active" class="auth-link primary">
+            Registrarme
+          </a>
+        }
+      </div>
+    </header>
+
+    <main class="page-content">
+      <router-outlet></router-outlet>
+    </main>
+  </section>
 </div>
