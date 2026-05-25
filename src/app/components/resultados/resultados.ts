@@ -17,6 +17,7 @@ interface ResultsTable {
 })
 export class Resultados implements OnInit {
   private gameResultsService = inject(GameResultsService);
+  private readonly maxResultsPerGame = 5;
 
   loading = signal(false);
   errorMessage = signal<string | null>(null);
@@ -25,31 +26,31 @@ export class Resultados implements OnInit {
     {
       title: 'Ahorcado Argentino',
       game: 'ahorcado',
-      description: 'Ranking por puntaje, tiempo y resultado de partida.',
+      description: 'Top 5 por puntaje, tiempo y resultado de partida.',
       results: [],
     },
     {
       title: 'Mayor o Menor',
       game: 'mayor-menor',
-      description: 'Ranking según aciertos, puntaje y velocidad de finalización.',
+      description: 'Top 5 según aciertos, puntaje y velocidad de finalización.',
       results: [],
     },
     {
       title: 'Preguntados',
       game: 'preguntados',
-      description: 'Ranking de preguntas correctas obtenidas desde la API externa.',
+      description: 'Top 5 de preguntas correctas obtenidas desde la API externa.',
       results: [],
     },
     {
       title: 'Sonido o Símbolo',
       game: 'sonido-simbolo',
-      description: 'Ranking del juego propio según puntaje, ayudas usadas y tiempo.',
+      description: 'Top 5 del juego propio según puntaje, ayudas usadas y tiempo.',
       results: [],
     },
   ]);
 
   totalResults = computed(() =>
-    this.tables().reduce((total, table) => total + table.results.length, 0)
+    this.tables().reduce((total, table) => total + table.results.length, 0),
   );
 
   async ngOnInit(): Promise<void> {
@@ -64,8 +65,11 @@ export class Resultados implements OnInit {
       const updatedTables = await Promise.all(
         this.tables().map(async (table) => ({
           ...table,
-          results: await this.gameResultsService.getResultsByGame(table.game),
-        }))
+          results: await this.gameResultsService.getResultsByGame(
+            table.game,
+            this.maxResultsPerGame,
+          ),
+        })),
       );
 
       this.tables.set(updatedTables);

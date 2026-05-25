@@ -9,6 +9,8 @@
 }
 
 .results-hero {
+  position: relative;
+  overflow: hidden;
   display: flex;
   justify-content: space-between;
   gap: 1rem;
@@ -24,6 +26,17 @@
     inset 0 0 0 1px rgba(255, 255, 255, 0.04);
 }
 
+.results-hero::before {
+  content: '';
+  position: absolute;
+  left: 24px;
+  right: 24px;
+  top: -4px;
+  height: 7px;
+  background: linear-gradient(90deg, transparent, #7fd0ff, transparent);
+  opacity: 0.7;
+}
+
 .section-kicker {
   display: inline-flex;
   margin: 0 0 0.9rem;
@@ -35,6 +48,7 @@
   font-weight: 900;
   letter-spacing: 1px;
   text-transform: uppercase;
+  clip-path: polygon(10px 0, 100% 0, calc(100% - 10px) 100%, 0 100%);
 }
 
 .results-hero h2 {
@@ -84,7 +98,9 @@
   border: 2px solid rgba(127, 208, 255, 0.24);
   border-radius: 28px 10px;
   background: linear-gradient(180deg, rgba(16, 36, 58, 0.96), rgba(7, 17, 29, 0.98));
-  box-shadow: 0 20px 34px rgba(0, 0, 0, 0.32);
+  box-shadow:
+    0 20px 34px rgba(0, 0, 0, 0.32),
+    inset 0 0 0 1px rgba(255, 255, 255, 0.04);
 }
 
 .state-card h3 {
@@ -111,20 +127,9 @@
   margin-bottom: 1rem;
 }
 
-.game-key {
-  display: inline-flex;
-  margin-bottom: 0.7rem;
-  padding: 5px 10px;
-  border: 1px solid rgba(127, 208, 255, 0.28);
-  color: #7fd0ff;
-  background: rgba(6, 16, 27, 0.72);
-  font-size: 0.75rem;
-  font-weight: 900;
-  text-transform: uppercase;
-}
-
 .table-header h3 {
   margin: 0;
+  color: #f2f8ff;
   font-size: clamp(1.4rem, 3vw, 2.1rem);
   text-transform: uppercase;
 }
@@ -222,21 +227,39 @@ tbody tr:hover {
 }
 
 .main-button {
+  position: relative;
+  isolation: isolate;
   margin-top: 1rem;
   padding: 13px 18px;
   border: 0;
-  border-radius: 10px 4px;
   color: #06101b;
-  background: linear-gradient(180deg, #b9ebff, #5ec0f2);
+  background: transparent;
+  font: inherit;
   font-weight: 900;
   text-transform: uppercase;
   cursor: pointer;
+  transition:
+    transform 0.15s ease,
+    filter 0.15s ease;
+}
+
+.main-button::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: 10px 4px;
+  background: linear-gradient(180deg, #b9ebff, #5ec0f2);
   box-shadow: 0 6px 0 #255d84;
+  transform: skewX(-12deg);
+}
+
+.main-button:hover {
+  filter: brightness(1.08);
 }
 
 .main-button:active {
   transform: translateY(3px);
-  box-shadow: 0 3px 0 #255d84;
 }
 
 @media (max-width: 800px) {

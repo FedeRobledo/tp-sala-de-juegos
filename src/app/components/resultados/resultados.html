@@ -4,13 +4,13 @@
       <p class="section-kicker">Resultados</p>
       <h2>Ranking de jugadores</h2>
       <p>
-        Consultá los resultados guardados en Supabase para cada juego de la sala.
+        Consultá los cinco mejores resultados guardados para cada juego de la sala.
         Las tablas se ordenan por mejor puntaje y menor tiempo.
       </p>
     </div>
 
     <div class="total-card">
-      <span>Partidas registradas</span>
+      <span>Resultados visibles</span>
       <strong>{{ totalResults() }}</strong>
     </div>
   </header>
@@ -35,13 +35,12 @@
         <article class="result-table-card">
           <div class="table-header">
             <div>
-              <span class="game-key">{{ table.game }}</span>
               <h3>{{ table.title }}</h3>
               <p>{{ table.description }}</p>
             </div>
 
             <div class="count-pill">
-              {{ table.results.length }} partidas
+              Top {{ table.results.length }}
             </div>
           </div>
 
