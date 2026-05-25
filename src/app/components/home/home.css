@@ -126,21 +126,34 @@
 }
 
 .play-button {
+  position: relative;
+  isolation: isolate;
   display: inline-flex;
   justify-content: center;
   align-items: center;
   padding: 14px 20px;
   color: #06101b;
-  background: linear-gradient(180deg, #b9ebff, #5ec0f2);
   font-weight: 900;
   text-transform: uppercase;
   text-decoration: none;
-  clip-path: polygon(14px 0, 100% 0, calc(100% - 14px) 100%, 0 100%);
+}
+
+.play-button::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: linear-gradient(180deg, #b9ebff, #5ec0f2);
   box-shadow: 0 7px 0 #255d84, 0 13px 22px rgba(0, 0, 0, 0.34);
+  transform: skewX(-14deg);
+  border-radius: 4px;
 }
 
 .play-button:active {
   transform: translateY(4px);
+}
+
+.play-button:active::before {
   box-shadow: 0 3px 0 #255d84;
 }
 
@@ -230,22 +243,37 @@
 }
 
 .node-footer {
+  position: relative;
+  z-index: 1;
+  isolation: isolate;
   margin: 0 22px 18px;
   padding: 10px 8px;
   text-align: center;
   color: #06101b;
-  background: #8fd7ff;
   font-size: 12px;
   font-weight: 900;
   letter-spacing: 0.6px;
   text-transform: uppercase;
-  clip-path: polygon(12px 0, 100% 0, calc(100% - 12px) 100%, 0 100%);
 }
 
-.locked .node-footer,
-.panel-footer {
+.node-footer::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: #8fd7ff;
+  border-radius: 6px;
+  transform: skewX(-12deg);
+  box-shadow: 0 4px 0 rgba(37, 93, 132, 0.85);
+}
+
+.locked .node-footer {
   color: #aeb7bf;
+}
+
+.locked .node-footer::before {
   background: #3a4652;
+  box-shadow: 0 4px 0 rgba(20, 28, 36, 0.9);
 }
 
 /* Dibujo ahorcado */
@@ -500,15 +528,28 @@
 }
 
 .panel-footer {
+  position: relative;
+  z-index: 1;
+  isolation: isolate;
   display: flex;
   justify-content: center;
   margin-top: 12px;
   padding: 11px 12px;
+  color: #aeb7bf;
   font-size: 12px;
   font-weight: 900;
   letter-spacing: 0.6px;
   text-transform: uppercase;
-  clip-path: polygon(9px 0, 100% 0, calc(100% - 9px) 100%, 0 100%);
+}
+
+.panel-footer::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: #3a4652;
+  border-radius: 6px;
+  transform: skewX(-10deg);
 }
 
 /* Responsive */
