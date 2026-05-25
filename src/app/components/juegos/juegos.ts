@@ -41,7 +41,7 @@ export class Juegos {
     {
       title: 'Sonido o Símbolo',
       description:
-        'Leé pistas sobre sonidos, símbolos, lugares y costumbres argentinas, y elegí la referencia correcta.',
+        'Escuchá una pista sonora, escribí la respuesta y, si necesitás ayuda, revelá un símbolo. Tenés un solo intento por ronda.',
       route: '/juegos/sonido-simbolo',
       status: 'available',
     },
