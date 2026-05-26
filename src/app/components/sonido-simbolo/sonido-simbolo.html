@@ -15,58 +15,24 @@
     </div>
   </header>
 
-  @if (finished()) {
-    <section class="result-card" [class.win]="won()" [class.lose]="!won()">
+  @if (finished() && !showResultModal()) {
+    <section class="game-panel finished-state">
       <p class="section-kicker">Partida finalizada</p>
+      <h3>{{ won() ? 'Victoria' : 'Derrota' }}</h3>
+      <p>
+        La partida terminó con {{ correctAnswers() }} respuestas correctas,
+        {{ wrongAnswers() }} incorrectas y un puntaje final de {{ score() }}.
+      </p>
 
-      @if (won()) {
-        <h3>¡Buen reconocimiento argentino!</h3>
-        <p>Superaste el desafío reconociendo la mayoría de los sonidos o símbolos.</p>
-      } @else {
-        <h3>Desafío terminado</h3>
-        <p>No alcanzaste la cantidad necesaria de aciertos, pero podés volver a intentarlo.</p>
-      }
+      <div class="finished-actions">
+        <button type="button" class="secondary-button" (click)="openResultModal()">
+          Ver resumen
+        </button>
 
-      <div class="summary-grid">
-        <div>
-          <span>Correctas</span>
-          <strong>{{ correctAnswers() }}</strong>
-        </div>
-
-        <div>
-          <span>Incorrectas</span>
-          <strong>{{ wrongAnswers() }}</strong>
-        </div>
-
-        <div>
-          <span>Ayudas usadas</span>
-          <strong>{{ usedHelps() }}</strong>
-        </div>
-
-        <div>
-          <span>Tiempo</span>
-          <strong>{{ elapsedSeconds() }} s</strong>
-        </div>
-
-        <div>
-          <span>Puntaje</span>
-          <strong>{{ score() }}</strong>
-        </div>
+        <button type="button" class="primary-button" (click)="startGame()">
+          Jugar otra vez
+        </button>
       </div>
-
-      @if (savingResult()) {
-        <p class="save-status">Guardando resultado...</p>
-      }
-
-      @if (resultSaved()) {
-        <p class="save-status success">Resultado guardado correctamente.</p>
-      }
-
-      @if (saveResultError()) {
-        <p class="save-status error">{{ saveResultError() }}</p>
-      }
-
-      <button type="button" class="main-button" (click)="startGame()">Jugar otra vez</button>
     </section>
   } @else if (currentRound(); as round) {
     <section class="game-panel">
@@ -83,33 +49,33 @@
           [disabled]="selectedAnswer() !== null"
           (click)="playSound()"
         >
-        <span class="tile-label">Sonido</span>
+          <span class="tile-label">Sonido</span>
 
-        <div class="sound-frame">
-        <strong>
-            @if (audioPlaying()) {
-            Reproduciendo...
-            } @else {
-            Reproducir sonido
-            }
-        </strong>
+          <div class="sound-frame">
+            <strong>
+              @if (audioPlaying()) {
+                Reproduciendo...
+              } @else {
+                Reproducir sonido
+              }
+            </strong>
 
-        <span>
-            @if (audioPlaying()) {
-            El sonido se detendrá automáticamente.
-            } @else {
-            Tocá esta tarjeta para escuchar.
-            }
-        </span>
-        </div>
+            <span>
+              @if (audioPlaying()) {
+                El sonido se detendrá automáticamente.
+              } @else {
+                Tocá esta tarjeta para escuchar.
+              }
+            </span>
+          </div>
 
-        @if (soundPlayed()) {
-        <p>{{ round.soundDescription }}</p>
-        } @else {
-        <p>Escuchá el sonido y escribí la respuesta.</p>
-        }
+          @if (soundPlayed()) {
+            <p>{{ round.soundDescription }}</p>
+          } @else {
+            <p>Escuchá el sonido y escribí la respuesta.</p>
+          }
 
-        <p class="attempt-note">El audio se reproduce durante 5 segundos como máximo.</p>
+          <p class="attempt-note">El audio se reproduce durante 5 segundos como máximo.</p>
 
           @if (audioError()) {
             <p class="asset-error">No se pudo reproducir el sonido. Revisá que el archivo exista.</p>
@@ -168,6 +134,8 @@
               Incorrecto. Tu respuesta fue “{{ answer }}”. La respuesta era {{ round.correctAnswer }}.
             </p>
           }
+
+          <p class="review-note">La próxima ronda comenzará en unos segundos.</p>
         }
       </div>
 
@@ -194,4 +162,65 @@
       </div>
     </section>
   }
-</section>  
+
+  @if (roundIntroVisible() && !finished()) {
+    <div class="round-intro-backdrop">
+      <section class="round-intro-modal">
+        <p>Ronda</p>
+        <strong>{{ currentRoundNumber() }} de {{ totalRounds() }}</strong>
+      </section>
+    </div>
+  }
+
+  @if (finished() && showResultModal()) {
+    <div class="modal-backdrop">
+      <section class="result-modal" [class.win]="won()" [class.lose]="!won()">
+        <p class="modal-kicker">{{ won() ? 'Victoria' : 'Derrota' }}</p>
+
+        <h3>
+          {{ won() ? '¡Buen reconocimiento argentino!' : 'Desafío terminado' }}
+        </h3>
+
+        @if (won()) {
+          <p class="modal-text">
+            Superaste el desafío reconociendo la mayoría de los sonidos o símbolos.
+          </p>
+        } @else {
+          <p class="modal-text">
+            No alcanzaste la cantidad necesaria de aciertos, pero podés volver a intentarlo.
+          </p>
+        }
+
+        <div class="modal-stats">
+          <span>Correctas: {{ correctAnswers() }}</span>
+          <span>Incorrectas: {{ wrongAnswers() }}</span>
+          <span>Ayudas usadas: {{ usedHelps() }}</span>
+          <span>Tiempo: {{ elapsedSeconds() }} s</span>
+          <span>Puntaje: {{ score() }}</span>
+        </div>
+
+        @if (savingResult()) {
+          <p class="save-status">Guardando resultado...</p>
+        }
+
+        @if (resultSaved()) {
+          <p class="save-status success">Resultado guardado correctamente.</p>
+        }
+
+        @if (saveResultError()) {
+          <p class="save-status error">{{ saveResultError() }}</p>
+        }
+
+        <div class="modal-actions">
+          <button type="button" class="secondary-button" (click)="closeResultModal()">
+            Cerrar
+          </button>
+
+          <button type="button" class="primary-button" (click)="startGame()">
+            Jugar otra vez
+          </button>
+        </div>
+      </section>
+    </div>
+  }
+</section>

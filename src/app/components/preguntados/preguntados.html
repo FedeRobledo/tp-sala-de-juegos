@@ -31,55 +31,24 @@
         Intentar nuevamente
       </button>
     </section>
-  } @else if (finished()) {
-    <section class="result-card" [class.win]="won()" [class.lose]="!won()">
+  } @else if (finished() && !showResultModal()) {
+    <section class="state-card finished-state">
       <p class="section-kicker">Partida finalizada</p>
+      <h3>{{ won() ? 'Victoria' : 'Derrota' }}</h3>
+      <p>
+        La partida terminó con {{ correctAnswers() }} respuestas correctas,
+        {{ wrongAnswers() }} incorrectas y un puntaje final de {{ score() }}.
+      </p>
 
-      @if (won()) {
-        <h3>¡Buen resultado!</h3>
-        <p>Superaste la partida respondiendo correctamente la mayoría de las preguntas.</p>
-      } @else {
-        <h3>Partida terminada</h3>
-        <p>No alcanzaste la cantidad necesaria de respuestas correctas. Podés volver a intentarlo.</p>
-      }
+      <div class="finished-actions">
+        <button type="button" class="secondary-button" (click)="openResultModal()">
+          Ver resumen
+        </button>
 
-      <div class="summary-grid">
-        <div>
-          <span>Correctas</span>
-          <strong>{{ correctAnswers() }}</strong>
-        </div>
-
-        <div>
-          <span>Incorrectas</span>
-          <strong>{{ wrongAnswers() }}</strong>
-        </div>
-
-        <div>
-          <span>Tiempo</span>
-          <strong>{{ elapsedSeconds() }} s</strong>
-        </div>
-
-        <div>
-          <span>Puntaje</span>
-          <strong>{{ score() }}</strong>
-        </div>
+        <button type="button" class="primary-button" (click)="restartGame()">
+          Jugar otra vez
+        </button>
       </div>
-
-      @if (savingResult()) {
-        <p class="save-status">Guardando resultado...</p>
-      }
-
-      @if (resultSaved()) {
-        <p class="save-status success">Resultado guardado correctamente.</p>
-      }
-
-      @if (saveResultError()) {
-        <p class="save-status error">{{ saveResultError() }}</p>
-      }
-
-      <button type="button" class="main-button" (click)="restartGame()">
-        Jugar otra vez
-      </button>
     </section>
   } @else if (currentQuestion(); as question) {
     <section class="game-panel">
@@ -133,5 +102,56 @@
         </div>
       </div>
     </section>
+  }
+
+  @if (finished() && showResultModal()) {
+    <div class="modal-backdrop">
+      <section class="result-modal" [class.win]="won()" [class.lose]="!won()">
+        <p class="modal-kicker">{{ won() ? 'Victoria' : 'Derrota' }}</p>
+
+        <h3>
+          {{ won() ? '¡Buen resultado!' : 'Partida terminada' }}
+        </h3>
+
+        @if (won()) {
+          <p class="modal-text">
+            Superaste la partida respondiendo correctamente la mayoría de las preguntas.
+          </p>
+        } @else {
+          <p class="modal-text">
+            No alcanzaste la cantidad necesaria de respuestas correctas. Podés volver a intentarlo.
+          </p>
+        }
+
+        <div class="modal-stats">
+          <span>Correctas: {{ correctAnswers() }}</span>
+          <span>Incorrectas: {{ wrongAnswers() }}</span>
+          <span>Tiempo: {{ elapsedSeconds() }} s</span>
+          <span>Puntaje: {{ score() }}</span>
+        </div>
+
+        @if (savingResult()) {
+          <p class="save-status">Guardando resultado...</p>
+        }
+
+        @if (resultSaved()) {
+          <p class="save-status success">Resultado guardado correctamente.</p>
+        }
+
+        @if (saveResultError()) {
+          <p class="save-status error">{{ saveResultError() }}</p>
+        }
+
+        <div class="modal-actions">
+          <button type="button" class="secondary-button" (click)="closeResultModal()">
+            Cerrar
+          </button>
+
+          <button type="button" class="primary-button" (click)="restartGame()">
+            Jugar otra vez
+          </button>
+        </div>
+      </section>
+    </div>
   }
 </section>

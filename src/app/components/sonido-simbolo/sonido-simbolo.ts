@@ -29,8 +29,11 @@ export class SonidoSimbolo implements OnInit, OnDestroy {
   private authService = inject(AuthService);
   private gameResultsService = inject(GameResultsService);
 
+  private readonly answerReviewDelayMs = 3000;
+
   private timerId: ReturnType<typeof setInterval> | null = null;
   private nextRoundTimeoutId: ReturnType<typeof setTimeout> | null = null;
+  private roundIntroTimeoutId: ReturnType<typeof setTimeout> | null = null;
   private audioLimitTimeoutId: ReturnType<typeof setTimeout> | null = null;
   private currentAudio: HTMLAudioElement | null = null;
 
@@ -88,8 +91,10 @@ export class SonidoSimbolo implements OnInit, OnDestroy {
   audioPlaying = signal(false);
   visualHelpUsed = signal(false);
   audioError = signal(false);
+  roundIntroVisible = signal(false);
 
   finished = signal(false);
+  showResultModal = signal(false);
   elapsedSeconds = signal(0);
 
   correctAnswers = signal(0);
@@ -130,12 +135,14 @@ export class SonidoSimbolo implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.stopTimer();
     this.clearNextRoundTimeout();
+    this.clearRoundIntroTimeout();
     this.stopCurrentAudio();
   }
 
   startGame(): void {
     this.stopTimer();
     this.clearNextRoundTimeout();
+    this.clearRoundIntroTimeout();
     this.stopCurrentAudio();
 
     this.rounds.set(this.getRandomRounds());
@@ -147,8 +154,10 @@ export class SonidoSimbolo implements OnInit, OnDestroy {
     this.audioPlaying.set(false);
     this.visualHelpUsed.set(false);
     this.audioError.set(false);
+    this.roundIntroVisible.set(false);
 
     this.finished.set(false);
+    this.showResultModal.set(false);
     this.elapsedSeconds.set(0);
 
     this.correctAnswers.set(0);
@@ -161,6 +170,7 @@ export class SonidoSimbolo implements OnInit, OnDestroy {
     this.saveResultError.set(null);
 
     this.startTimer();
+    this.showRoundIntro();
   }
 
   playSound(): void {
@@ -255,7 +265,15 @@ export class SonidoSimbolo implements OnInit, OnDestroy {
 
     this.nextRoundTimeoutId = setTimeout(() => {
       this.goToNextRound();
-    }, 1200);
+    }, this.answerReviewDelayMs);
+  }
+
+  closeResultModal(): void {
+    this.showResultModal.set(false);
+  }
+
+  openResultModal(): void {
+    this.showResultModal.set(true);
   }
 
   private goToNextRound(): void {
@@ -276,12 +294,17 @@ export class SonidoSimbolo implements OnInit, OnDestroy {
     this.audioPlaying.set(false);
     this.visualHelpUsed.set(false);
     this.audioError.set(false);
+
+    this.showRoundIntro();
   }
 
   private finishGame(): void {
     this.finished.set(true);
+    this.showResultModal.set(true);
+    this.roundIntroVisible.set(false);
     this.stopTimer();
     this.clearNextRoundTimeout();
+    this.clearRoundIntroTimeout();
     this.stopCurrentAudio();
 
     void this.saveGameResult();
@@ -322,6 +345,7 @@ export class SonidoSimbolo implements OnInit, OnDestroy {
         usesRealAssets: true,
         answerMode: 'typed-one-attempt',
         maxAudioSeconds: 5,
+        answerReviewSeconds: this.answerReviewDelayMs / 1000,
       },
     });
 
@@ -333,6 +357,15 @@ export class SonidoSimbolo implements OnInit, OnDestroy {
     }
 
     this.resultSaved.set(true);
+  }
+
+  private showRoundIntro(): void {
+    this.clearRoundIntroTimeout();
+    this.roundIntroVisible.set(true);
+
+    this.roundIntroTimeoutId = setTimeout(() => {
+      this.roundIntroVisible.set(false);
+    }, 950);
   }
 
   private startTimer(): void {
@@ -359,6 +392,15 @@ export class SonidoSimbolo implements OnInit, OnDestroy {
 
     clearTimeout(this.nextRoundTimeoutId);
     this.nextRoundTimeoutId = null;
+  }
+
+  private clearRoundIntroTimeout(): void {
+    if (!this.roundIntroTimeoutId) {
+      return;
+    }
+
+    clearTimeout(this.roundIntroTimeoutId);
+    this.roundIntroTimeoutId = null;
   }
 
   private stopCurrentAudio(): void {

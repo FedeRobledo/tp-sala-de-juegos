@@ -25,6 +25,7 @@ export class Preguntados implements OnInit, OnDestroy {
   loading = signal(false);
   errorMessage = signal<string | null>(null);
   finished = signal(false);
+  showResultModal = signal(false);
 
   correctAnswers = signal(0);
   wrongAnswers = signal(0);
@@ -82,6 +83,7 @@ export class Preguntados implements OnInit, OnDestroy {
     this.loading.set(true);
     this.errorMessage.set(null);
     this.finished.set(false);
+    this.showResultModal.set(false);
     this.currentIndex.set(0);
     this.selectedOption.set(null);
     this.correctAnswers.set(0);
@@ -165,6 +167,14 @@ export class Preguntados implements OnInit, OnDestroy {
     void this.startGame();
   }
 
+  closeResultModal(): void {
+    this.showResultModal.set(false);
+  }
+
+  openResultModal(): void {
+    this.showResultModal.set(true);
+  }
+
   private goToNextQuestion(): void {
     this.clearNextQuestionTimeout();
 
@@ -181,6 +191,7 @@ export class Preguntados implements OnInit, OnDestroy {
 
   private finishGame(): void {
     this.finished.set(true);
+    this.showResultModal.set(true);
     this.stopTimer();
     this.clearNextQuestionTimeout();
 
