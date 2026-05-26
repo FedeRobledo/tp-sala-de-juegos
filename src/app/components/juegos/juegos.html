@@ -1,0 +1,111 @@
+<section class="games-page">
+  <header class="games-hero">
+    <div>
+      <p class="section-kicker">Sala de juegos</p>
+      <h2>Elegí un desafío</h2>
+      <p>
+        Estos son los juegos disponibles dentro de la sala. Los resultados se guardan
+        con tu usuario y registran tu desempeño en cada partida.
+      </p>
+    </div>
+  </header>
+
+  <section class="games-section">
+    <div class="section-title">
+      <span class="title-line"></span>
+      <h3>Disponibles</h3>
+      <span class="title-line"></span>
+    </div>
+
+    <div class="games-grid">
+      @for (game of availableGames; track game.title) {
+        <a [routerLink]="game.route" class="game-card available-card">
+          <div class="game-content">
+            <span class="game-status">Disponible</span>
+            <h4>{{ game.title }}</h4>
+            <p>{{ game.description }}</p>
+          </div>
+
+          <div class="play-chip">Jugar</div>
+        </a>
+      }
+    </div>
+  </section>
+
+  <section class="games-section">
+    <div class="section-title">
+      <span class="title-line"></span>
+      <h3>Próximamente</h3>
+      <span class="title-line"></span>
+    </div>
+
+    <div class="games-grid">
+      @for (game of comingSoonGames; track game.title) {
+        <article class="game-card locked-card">
+          <div class="game-content">
+            <span class="game-status">Próximamente</span>
+            <h4>{{ game.title }}</h4>
+            <p>{{ game.description }}</p>
+          </div>
+
+          <div class="play-chip disabled">No disponible</div>
+        </article>
+      }
+    </div>
+  </section>
+</section><section class="games-page">
+  <header class="games-hero">
+    <div>
+      <p class="section-kicker">Sala de juegos</p>
+      <h2>Elegí un desafío</h2>
+      <p>
+        Estos son los juegos disponibles dentro de la sala. Los resultados se guardan
+        con tu usuario y registran tu desempeño en cada partida.
+      </p>
+    </div>
+  </header>
+
+  <section class="games-section">
+    <div class="section-title">
+      <span class="title-line"></span>
+      <h3>Disponibles</h3>
+      <span class="title-line"></span>
+    </div>
+
+    <div class="games-grid">
+      @for (game of availableGames; track game.title) {
+        <a [routerLink]="game.route" class="game-card available-card">
+          <div class="game-content">
+            <span class="game-status">Disponible</span>
+            <h4>{{ game.title }}</h4>
+            <p>{{ game.description }}</p>
+          </div>
+
+          <div class="play-chip">Jugar</div>
+        </a>
+      }
+    </div>
+  </section>
+
+  <section class="games-section">
+    <div class="section-title">
+      <span class="title-line"></span>
+      <h3>Próximamente</h3>
+      <span class="title-line"></span>
+    </div>
+
+    <div class="games-grid">
+      @for (game of comingSoonGames; track game.title) {
+        <article class="game-card locked-card">
+          <div class="game-content">
+            <span class="game-status">Próximamente</span>
+            <h4>{{ game.title }}</h4>
+            <p>{{ game.description }}</p>
+          </div>
+
+          <div class="play-chip disabled">No disponible</div>
+        </article>
+      }
+    </div>
+  </section>
+</section>

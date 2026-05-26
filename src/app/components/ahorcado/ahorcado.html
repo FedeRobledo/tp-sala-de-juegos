@@ -1,0 +1,128 @@
+<section class="hangman-page">
+  <header class="game-header">
+    <div>
+      <p class="game-kicker">Juego actual</p>
+      <h2>Ahorcado Argentino</h2>
+      <p class="game-description">
+        Adiviná la palabra relacionada con historia, cultura o geografía argentina.
+      </p>
+    </div>
+
+    <button type="button" class="new-game-button" (click)="newGame()">Nueva partida</button>
+  </header>
+
+  <div class="game-grid">
+    <section class="hangman-card drawing-card">
+      <div class="hangman-drawing" [class.error-1]="errors() >= 1" [class.error-2]="errors() >= 2" [class.error-3]="errors() >= 3" [class.error-4]="errors() >= 4" [class.error-5]="errors() >= 5" [class.error-6]="errors() >= 6">
+        <span class="base"></span>
+        <span class="post"></span>
+        <span class="beam"></span>
+        <span class="rope"></span>
+        <span class="head"></span>
+        <span class="body"></span>
+        <span class="arm left"></span>
+        <span class="arm right"></span>
+        <span class="leg left"></span>
+        <span class="leg right"></span>
+      </div>
+    </section>
+
+    <section class="hangman-card main-game-card">
+      <div class="hint-box">
+        <span class="hint-label">Pista</span>
+        <p>{{ currentWord().hint }}</p>
+      </div>
+
+      <div class="word-display" aria-label="Palabra a adivinar">
+        {{ displayedWord() }}
+      </div>
+
+      <p class="category">Categoría: {{ currentWord().category }}</p>
+
+      <div class="letters-grid">
+        @for (letter of letters; track letter) {
+          <button
+            type="button"
+            class="letter-button"
+            [class.selected]="isSelected(letter)"
+            [class.correct]="isSelected(letter) && isCorrect(letter)"
+            [class.incorrect]="isSelected(letter) && !isCorrect(letter)"
+            [disabled]="isSelected(letter) || gameFinished()"
+            (click)="selectLetter(letter)"
+          >
+            {{ letter }}
+          </button>
+        }
+      </div>
+    </section>
+
+    <aside class="hangman-card status-card">
+      <h3>Estado del juego</h3>
+
+      <div class="status-row">
+        <span>Intentos restantes</span>
+        <strong>{{ remainingAttempts() }} / {{ maxErrors }}</strong>
+      </div>
+
+      <div class="status-row">
+        <span>Letras seleccionadas</span>
+        <strong>{{ selectedCount() }}</strong>
+      </div>
+
+      <div class="status-row">
+        <span>Errores</span>
+        <strong>{{ errors() }}</strong>
+      </div>
+
+      <div class="status-row">
+        <span>Tiempo</span>
+        <strong>{{ timeSeconds() }} s</strong>
+      </div>
+
+      <div class="status-row">
+        <span>Puntaje estimado</span>
+        <strong>{{ score() }}</strong>
+      </div>
+    </aside>
+  </div>
+
+  @if (showResultModal()) {
+    <div class="modal-backdrop">
+      <section class="result-modal">
+        <p class="modal-kicker">{{ won() ? 'Victoria' : 'Derrota' }}</p>
+
+        <h3>
+          {{ won() ? '¡Ganaste la partida!' : 'Se completó el ahorcado' }}
+        </h3>
+
+        <p class="modal-text">
+          La palabra era <strong>{{ currentWord().word }}</strong>.
+        </p>
+
+        <div class="modal-stats">
+          <span>Tiempo: {{ timeSeconds() }} s</span>
+          <span>Letras: {{ selectedCount() }}</span>
+          <span>Errores: {{ errors() }}</span>
+          <span>Puntaje: {{ score() }}</span>
+        </div>
+
+        @if (savingResult()) {
+        <p class="save-status">Guardando resultado...</p>
+        }
+
+        @if (resultSaved()) {
+        <p class="save-status success">Resultado guardado correctamente.</p>
+        }
+
+        @if (saveResultError()) {
+        <p class="save-status error">{{ saveResultError() }}</p>
+        }
+
+        <div class="modal-actions">
+          <button type="button" class="secondary-button" (click)="closeModal()">Cerrar</button>
+          <button type="button" class="primary-button" (click)="newGame()">Nueva partida</button>
+        </div>
+      </section>
+    </div>
+  }
+</section>

@@ -1,11 +1,11 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, computed, inject } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { AuthService } from '../../services/auth';
 
 interface MenuItem {
   label: string;
-  icon: string;
   route: string;
+  requiresAuth?: boolean;
 }
 
 @Component({
@@ -18,39 +18,47 @@ export class Layout {
   private router = inject(Router);
   authService = inject(AuthService);
 
-  sidebarOpen = signal(true);
-
-  menuItems: MenuItem[] = [
+  private menuItems: MenuItem[] = [
     {
       label: 'Home',
-      icon: '🏠',
       route: '/home',
     },
     {
       label: 'Quién soy',
-      icon: '👤',
       route: '/quien-soy',
     },
     {
       label: 'Juegos',
-      icon: '🎮',
       route: '/juegos',
+      requiresAuth: true,
     },
     {
-      label: 'Resultados',
-      icon: '🏆',
-      route: '/resultados',
+      label: 'Ahorcado',
+      route: '/juegos/ahorcado',
+      requiresAuth: true,
+    },
+    {
+      label: 'Mayor o Menor',
+      route: '/juegos/mayor-menor',
+      requiresAuth: true,
     },
     {
       label: 'Chat',
-      icon: '💬',
       route: '/chat',
+      requiresAuth: true,
+    },
+    {
+      label: 'Resultados',
+      route: '/resultados',
+      requiresAuth: true,
     },
   ];
 
-  toggleSidebar(): void {
-    this.sidebarOpen.update((isOpen) => !isOpen);
-  }
+  visibleMenuItems = computed(() => {
+    const isLoggedIn = this.authService.isLoggedIn();
+
+    return this.menuItems.filter((item) => !item.requiresAuth || isLoggedIn);
+  });
 
   async logout(): Promise<void> {
     await this.authService.logout();

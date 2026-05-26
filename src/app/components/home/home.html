@@ -1,69 +1,121 @@
-<section class="hero-card">
-  <div class="hero-copy">
-    <p class="eyebrow">Sprint 2 · Autenticación y navegación</p>
+<section class="extreme-stage">
+  <div class="cockade-board" aria-hidden="true"></div>
+
+  <section class="center-console">
+    <span class="center-kicker">Sala de juegos</span>
 
     @if (authService.isLoggedIn()) {
-      <h2>Bienvenido, {{ authService.userDisplayName() }}</h2>
+      <h2>Elegí tu <span>desafío</span></h2>
 
-      <p class="hero-text">
-        Ya estás dentro de la Sala de Juegos. Desde acá vas a poder acceder a los
-        juegos, al chat y a tus resultados cuando avancemos con los próximos sprints.
+      <p>
+        Jugá minijuegos con identidad argentina, guardá tus puntajes y seguí mejorando en cada partida.
       </p>
+
+      <div class="center-actions">
+        <a routerLink="/juegos" class="play-button">Ver juegos disponibles</a>
+      </div>
     } @else {
-      <h2>Bienvenido a la Sala de Juegos</h2>
+      <h2>Entrá a la <span>Sala</span></h2>
 
-      <p class="hero-text">
-        Una experiencia de minijuegos con identidad argentina, estética gaming moderna
-        y progreso guardado para cada jugador.
+      <p>
+        Iniciá sesión para acceder a los juegos, guardar resultados y participar del chat.
       </p>
 
-      <div class="hero-actions">
-        <a routerLink="/login" class="btn primary">Iniciar sesión</a>
-        <a routerLink="/register" class="btn secondary">Crear cuenta</a>
+      <div class="center-actions">
+        <a routerLink="/login" class="play-button">Iniciar sesión</a>
       </div>
     }
-  </div>
+  </section>
 
-  <div class="hero-panel">
-    <span class="panel-icon">🎮</span>
+  <a routerLink="/juegos/ahorcado" class="game-node game-north-west">
+    <span class="game-tag">Disponible</span>
 
-    @if (authService.isLoggedIn()) {
-      <strong>Sesión activa</strong>
-      <p>
-        Tu usuario ya está conectado con Supabase. A partir de ahora podremos guardar
-        partidas, mensajes y estadísticas asociadas a tu perfil.
-      </p>
-    } @else {
-      <strong>Modo invitado</strong>
-      <p>
-        Iniciá sesión o registrate para jugar y guardar tus resultados.
-      </p>
-    }
-  </div>
-</section>
+    <div class="preview preview-hangman">
+      <span class="gallows gallows-a"></span>
+      <span class="gallows gallows-b"></span>
+      <span class="gallows gallows-c"></span>
+      <span class="stick head"></span>
+      <span class="stick torso"></span>
+      <span class="stick arm-one"></span>
+      <span class="stick arm-two"></span>
+      <span class="stick leg-one"></span>
+      <span class="stick leg-two"></span>
+      <p class="slots">_ _ _ _ _</p>
+    </div>
 
-<section class="games-grid">
-  <a routerLink="/juegos" class="game-card">
-    <span>🧠</span>
-    <h3>Ahorcado</h3>
-    <p>Próximamente: adiviná palabras usando botones del abecedario.</p>
+    <div class="node-title">Ahorcado Argentino</div>
+    <div class="node-footer">Presioná y jugá</div>
   </a>
 
-  <a routerLink="/juegos" class="game-card">
-    <span>🃏</span>
-    <h3>Mayor o Menor</h3>
-    <p>Próximamente: poné a prueba tu intuición con cartas.</p>
+  <a routerLink="/juegos/mayor-menor" class="game-node game-north-east">
+    <span class="game-tag">Disponible</span>
+
+    <div class="preview preview-cards">
+      <div class="spanish-card card-left">
+        <strong>7</strong>
+        <span>ORO</span>
+      </div>
+
+      <div class="spanish-card card-right">
+        <strong>11</strong>
+        <span>COPA</span>
+      </div>
+
+      <p>¿Mayor?</p>
+    </div>
+
+    <div class="node-title">Mayor o Menor</div>
+    <div class="node-footer">Presioná y jugá</div>
   </a>
 
-  <a routerLink="/juegos" class="game-card">
-    <span>❓</span>
-    <h3>Preguntados</h3>
-    <p>Próximamente: respondé preguntas y sumá puntos.</p>
+  <a routerLink="/juegos" class="game-node game-south-west locked">
+    <span class="game-tag">Próximamente</span>
+
+    <div class="preview preview-quiz">
+      <div class="mini-question">¿Capital de La Pampa?</div>
+
+      <div class="mini-options">
+        <span>A</span>
+        <span>B</span>
+        <span>C</span>
+        <span>D</span>
+      </div>
+    </div>
+
+    <div class="node-title">Preguntados</div>
+    <div class="node-footer">Próximamente</div>
   </a>
 
-  <a routerLink="/juegos" class="game-card featured">
-    <span>🇦🇷</span>
-    <h3>Sonido o Símbolo</h3>
-    <p>Juego propio con sonidos, símbolos y referencias argentinas.</p>
+  <a routerLink="/juegos" class="game-node game-south-east locked">
+    <span class="game-tag">Próximamente</span>
+
+    <div class="preview preview-mystery">
+      <div class="mystery-mark">?</div>
+      <p>Próximo</p>
+    </div>
+
+    <div class="node-title">Sonido o Símbolo</div>
+    <div class="node-footer">Próximamente</div>
+  </a>
+
+  <a routerLink="/resultados" class="ranking-panel">
+    <h3 class="panel-title">Mejores puntajes</h3>
+
+    <div class="result-line">
+      <span>Ahorcado</span>
+      <strong>Próximamente</strong>
+    </div>
+
+    <div class="result-line">
+      <span>Mayor o Menor</span>
+      <strong>Próximamente</strong>
+    </div>
+
+    <div class="result-line">
+      <span>Ranking general</span>
+      <strong>Próximamente</strong>
+    </div>
+
+    <div class="panel-footer">Ver resultados</div>
   </a>
 </section>

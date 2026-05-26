@@ -1,0 +1,167 @@
+<section class="higher-lower-page">
+  <header class="game-header">
+    <div>
+      <p class="game-kicker">Juego actual</p>
+      <h2>Mayor o Menor</h2>
+      <p class="game-description">
+        Observá la carta actual y adiviná si la próxima carta de la baraja española será mayor o menor.
+      </p>
+    </div>
+
+    <button type="button" class="new-game-button" (click)="newGame()">Nueva partida</button>
+  </header>
+
+  <div class="game-grid">
+    <section class="game-card table-card">
+      <div class="round-info">
+        <span>Ronda {{ roundsPlayed() + 1 > maxRounds ? maxRounds : roundsPlayed() + 1 }} / {{ maxRounds }}</span>
+        <strong>{{ lastResultMessage() }}</strong>
+      </div>
+
+      <div class="cards-table">
+        <article class="spanish-card current-card">
+          <div class="card-corner top">
+            <strong>{{ currentCard().value }}</strong>
+            <span>{{ suitIcon(currentCard().suit) }}</span>
+          </div>
+
+          <div class="card-center">
+            <span class="suit-big">{{ suitIcon(currentCard().suit) }}</span>
+            <h3>{{ currentCard().suit }}</h3>
+            <p>Carta actual</p>
+          </div>
+
+          <div class="card-corner bottom">
+            <strong>{{ currentCard().value }}</strong>
+            <span>{{ suitIcon(currentCard().suit) }}</span>
+          </div>
+        </article>
+
+        @if (nextCard()) {
+          <article class="spanish-card next-card">
+            <div class="card-corner top">
+              <strong>{{ nextCard()!.value }}</strong>
+              <span>{{ suitIcon(nextCard()!.suit) }}</span>
+            </div>
+
+            <div class="card-center">
+              <span class="suit-big">{{ suitIcon(nextCard()!.suit) }}</span>
+              <h3>{{ nextCard()!.suit }}</h3>
+              <p>Carta revelada</p>
+            </div>
+
+            <div class="card-corner bottom">
+              <strong>{{ nextCard()!.value }}</strong>
+              <span>{{ suitIcon(nextCard()!.suit) }}</span>
+            </div>
+          </article>
+        } @else {
+          <article class="spanish-card hidden-card">
+            <div class="hidden-pattern">?</div>
+            <p>Próxima carta</p>
+          </article>
+        }
+      </div>
+
+      <div class="actions">
+        @if (!nextCard() && !gameFinished()) {
+          <button type="button" class="guess-button higher" (click)="choose('mayor')">
+            Mayor
+          </button>
+
+          <button type="button" class="guess-button lower" (click)="choose('menor')">
+            Menor
+          </button>
+        }
+
+        @if (nextCard() && !gameFinished()) {
+          <button type="button" class="continue-button" (click)="continueGame()">
+            Siguiente carta
+          </button>
+        }
+
+        @if (gameFinished()) {
+          <button type="button" class="continue-button" (click)="newGame()">
+            Jugar de nuevo
+          </button>
+        }
+      </div>
+    </section>
+
+    <aside class="game-card status-card">
+      <h3>Estado de la partida</h3>
+
+      <div class="status-row">
+        <span>Aciertos</span>
+        <strong>{{ correctAnswers() }}</strong>
+      </div>
+
+      <div class="status-row">
+        <span>Errores</span>
+        <strong>{{ errors() }} / {{ maxErrors }}</strong>
+      </div>
+
+      <div class="status-row">
+        <span>Rondas restantes</span>
+        <strong>{{ remainingRounds() }}</strong>
+      </div>
+
+      <div class="status-row">
+        <span>Tiempo</span>
+        <strong>{{ timeSeconds() }} s</strong>
+      </div>
+
+      <div class="status-row">
+        <span>Puntaje estimado</span>
+        <strong>{{ score() }}</strong>
+      </div>
+
+      <div class="rules-box">
+        <h4>Reglas</h4>
+        <p>Ganá completando 10 rondas sin llegar a 3 errores.</p>
+        <p>Para considerar victoria necesitás al menos 6 aciertos.</p>
+      </div>
+    </aside>
+  </div>
+
+  @if (showResultModal()) {
+    <div class="modal-backdrop">
+      <section class="result-modal">
+        <p class="modal-kicker">{{ won() ? 'Victoria' : 'Derrota' }}</p>
+
+        <h3>
+          {{ won() ? '¡Ganaste la partida!' : 'Terminó la partida' }}
+        </h3>
+
+        <p class="modal-text">
+          Lograste <strong>{{ correctAnswers() }}</strong> aciertos en
+          <strong>{{ roundsPlayed() }}</strong> rondas.
+        </p>
+
+        <div class="modal-stats">
+          <span>Tiempo: {{ timeSeconds() }} s</span>
+          <span>Aciertos: {{ correctAnswers() }}</span>
+          <span>Errores: {{ errors() }}</span>
+          <span>Puntaje: {{ score() }}</span>
+        </div>
+
+        @if (savingResult()) {
+          <p class="save-status">Guardando resultado...</p>
+        }
+
+        @if (resultSaved()) {
+          <p class="save-status success">Resultado guardado correctamente.</p>
+        }
+
+        @if (saveResultError()) {
+          <p class="save-status error">{{ saveResultError() }}</p>
+        }
+        
+        <div class="modal-actions">
+          <button type="button" class="secondary-button" (click)="closeModal()">Cerrar</button>
+          <button type="button" class="primary-button" (click)="newGame()">Nueva partida</button>
+        </div>
+      </section>
+    </div>
+  }
+</section>

@@ -8,6 +8,10 @@ import { NotFound } from './components/not-found/not-found';
 import { Proximamente } from './components/proximamente/proximamente';
 import { authGuard } from './guards/auth.guard';
 import { publicGuard } from './guards/public.guard';
+import { Ahorcado } from './components/ahorcado/ahorcado';
+import { MayorMenor } from './components/mayor-menor/mayor-menor';
+import { Chat } from './components/chat/chat';
+import { Juegos } from './components/juegos/juegos';
 
 export const routes: Routes = [
   {
@@ -20,26 +24,24 @@ export const routes: Routes = [
       { path: 'login', component: Login, canActivate: [publicGuard] },
       { path: 'register', component: Register, canActivate: [publicGuard] },
       {
-        path: 'juegos',
-        component: Proximamente,
+        path: 'juegos/ahorcado',
+        component: Ahorcado,
         canActivate: [authGuard],
-        data: {
-          titulo: 'Juegos',
-          icono: '🎮',
-          descripcion:
-            'En el próximo sprint se habilitarán Ahorcado y Mayor o Menor. Por ahora esta sección queda protegida para usuarios logueados.',
-        },
+      },
+      {
+        path: 'juegos/mayor-menor',
+        component: MayorMenor,
+        canActivate: [authGuard],
+      },
+      {
+        path: 'juegos',
+        component: Juegos,
+        canActivate: [authGuard],
       },
       {
         path: 'chat',
-        component: Proximamente,
+        component: Chat,
         canActivate: [authGuard],
-        data: {
-          titulo: 'Chat',
-          icono: '💬',
-          descripcion:
-            'La sala de chat global se implementará en el Sprint 3 con mensajes en tiempo real usando Supabase.',
-        },
       },
       {
         path: 'resultados',
