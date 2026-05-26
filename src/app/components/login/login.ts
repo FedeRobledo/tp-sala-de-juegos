@@ -25,10 +25,6 @@ export class Login implements OnInit {
   loading = this.authService.loading;
   error = this.authService.error;
 
-  ngOnInit(): void {
-    this.authService.clearError();
-  }
-
   quickAccessUsers: QuickAccessUser[] = [
     {
       label: 'Jugador 1',
@@ -47,14 +43,22 @@ export class Login implements OnInit {
     },
   ];
 
+  ngOnInit(): void {
+    this.authService.clearError();
+  }
+
   async login(): Promise<void> {
-    if (!this.email || !this.password) {
+    this.authService.error.set(null);
+
+    const email = this.email.trim();
+
+    if (!email || !this.password) {
       this.authService.error.set('Ingresá correo y contraseña.');
       return;
     }
 
     const success = await this.authService.login({
-      email: this.email,
+      email,
       password: this.password,
     });
 
@@ -64,6 +68,8 @@ export class Login implements OnInit {
   }
 
   async quickLogin(user: QuickAccessUser): Promise<void> {
+    this.authService.error.set(null);
+
     this.email = user.email;
     this.password = user.password;
 
