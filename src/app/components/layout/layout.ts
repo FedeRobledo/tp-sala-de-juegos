@@ -42,6 +42,11 @@ export class Layout {
       route: '/resultados',
       showWhenLoggedIn: true,
     },
+        {
+      label: 'Chat',
+      route: '/chat',
+      showWhenLoggedIn: true,
+    },
   ];
 
   visibleMenuItems = computed(() => {

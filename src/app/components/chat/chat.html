@@ -6,6 +6,11 @@
       <p>
         Mensajes visibles para todos los usuarios logueados. Los nuevos mensajes aparecen automáticamente.
       </p>
+
+      <div class="realtime-pill">
+        <span class="status-dot"></span>
+        <strong>{{ realtimeStatus() }}</strong>
+      </div>
     </div>
 
     <button type="button" class="refresh-button" (click)="loadMessages()" [disabled]="loading()">
@@ -17,7 +22,7 @@
     @if (loading()) {
       <div class="empty-state">Cargando mensajes...</div>
     } @else {
-      <div class="messages-list">
+      <div class="messages-list" #messagesContainer>
         @if (messages().length === 0) {
           <div class="empty-state">
             Todavía no hay mensajes. Sé el primero en escribir.
@@ -46,8 +51,9 @@
         type="text"
         placeholder="Escribir mensaje..."
         [value]="messageText()"
+        [disabled]="sending()"
         (input)="updateMessageText($event)"
-        (keyup.enter)="sendMessage()"
+        (keydown.enter)="sendMessage(); $event.preventDefault()"
       />
 
       <button type="button" (click)="sendMessage()" [disabled]="sending() || !messageText().trim()">
