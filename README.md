@@ -1,274 +1,223 @@
-# Sala de Juegos - Programación IV UTN
+# Sala Argentina de Juegos - Programación IV
 
-Aplicación web desarrollada en Angular para el Trabajo Práctico de Programación IV.
+Trabajo práctico desarrollado para la materia **Programación IV** de la Tecnicatura Universitaria en Programación.
 
-El proyecto consiste en una sala de juegos con autenticación de usuarios, navegación protegida, juegos funcionales, guardado de resultados y chat en tiempo real. La aplicación tiene una identidad visual basada en una sala de juegos argentina, combinando estética moderna con referencias nacionales.
+La aplicación consiste en una sala de juegos web desarrollada con **Angular** y conectada a **Supabase** para autenticación, almacenamiento de resultados y chat en tiempo real.
 
-## Alumno
+El proyecto fue trabajado por sprints, utilizando ramas en GitHub y deploy en Vercel.
 
-Federico Robledo
+---
 
-## Materia
+## Datos del alumno
 
-Programación IV - UTN
+- **Alumno:** Federico Robledo
+- **Materia:** Programación IV
+- **Institución:** UTN
+- **Proyecto:** Sala de Juegos
+- **Tecnologías principales:** Angular, TypeScript, Supabase, HTML y CSS
 
-## Tecnologías utilizadas
+---
 
-- Angular
-- TypeScript
-- HTML
-- CSS
-- Supabase
-- Supabase Auth
-- Supabase Database
-- Supabase Realtime
-- Git / GitHub
-- Vercel
+## Descripción general
+
+La aplicación permite que un usuario se registre, inicie sesión y acceda a una sala con distintos juegos.  
+Cada juego tiene reglas propias, condición de victoria o derrota, puntaje y guardado de resultados.
+
+Además, la aplicación incluye:
+
+- Login y registro de usuarios.
+- Guards para proteger rutas privadas.
+- Pantalla Home.
+- Pantalla de Juegos.
+- Chat global en tiempo real.
+- Tabla de resultados por juego.
+- Pantalla “Quién soy”.
+- Página Not Found.
+- Diseño responsive.
+- Favicon personalizado.
+- Modales y mensajes visuales en lugar de `alert()`.
+
+---
 
 ## Funcionalidades principales
 
-### Navegación general
-
-La aplicación cuenta con una navegación principal desde la cual se puede acceder a las secciones disponibles:
-
-- Home
-- Juegos
-- Ahorcado Argentino
-- Mayor o Menor
-- Chat
-- Resultados
-- Quién soy
-
-La navegación se adapta según el estado de sesión del usuario.
-
 ### Autenticación
 
-Se implementó autenticación utilizando Supabase.
+La autenticación se realiza mediante Supabase.
 
 El usuario puede:
 
-- Registrarse.
-- Iniciar sesión.
+- Registrarse con nombre, apellido, edad, email y contraseña.
+- Iniciar sesión con email y contraseña.
+- Usar accesos rápidos de prueba.
 - Cerrar sesión.
-- Mantener una sesión activa.
-- Acceder a secciones protegidas solamente si está autenticado.
+- Acceder a las rutas privadas solo si está logueado.
 
-Las pantallas de login y registro quedan disponibles únicamente para usuarios no autenticados.
-
-### Guards
-
-Se implementaron guards para proteger rutas privadas y evitar accesos incorrectos.
-
-Rutas protegidas:
-
-- `/juegos`
-- `/juegos/ahorcado`
-- `/juegos/mayor-menor`
-- `/chat`
-- `/resultados`
-
-Si un usuario no autenticado intenta ingresar a una ruta protegida, es redirigido al login.
-
-Si un usuario autenticado intenta ingresar a login o registro, es redirigido al home.
+---
 
 ## Juegos implementados
 
-### Ahorcado Argentino
+### Ahorcado
 
-Juego de ahorcado basado en palabras relacionadas con Argentina.
+Juego clásico donde el usuario debe adivinar una palabra antes de quedarse sin intentos.
 
 Características:
 
-- Palabras vinculadas a cultura, historia y geografía argentina.
-- Pistas para orientar al jugador.
-- Botones para seleccionar letras.
+- Palabras relacionadas con la temática argentina.
+- Letras seleccionables.
 - Control de errores.
-- Finalización por victoria o derrota.
-- Cálculo de puntaje.
-- Medición de tiempo.
+- Condición de victoria o derrota.
+- Puntaje.
 - Guardado del resultado en Supabase.
 
-Al finalizar una partida, se guarda información como:
-
-- Usuario.
-- Juego.
-- Puntaje.
-- Tiempo.
-- Si ganó o perdió.
-- Palabra jugada.
-- Letras seleccionadas.
-- Cantidad de errores.
+---
 
 ### Mayor o Menor
 
-Juego de cartas basado en la baraja española.
+Juego de cartas donde el usuario debe adivinar si la siguiente carta será mayor o menor que la actual.
 
 Características:
 
-- Carta actual visible.
+- Cartas visuales.
 - Elección entre mayor o menor.
-- Revelado de la siguiente carta.
-- Conteo de aciertos.
-- Control de errores.
-- Finalización por rondas o por errores.
-- Cálculo de puntaje.
-- Medición de tiempo.
+- Rondas sucesivas.
+- Condición de victoria o derrota.
+- Puntaje.
 - Guardado del resultado en Supabase.
 
-Al finalizar una partida, se guarda información como:
+---
 
-- Usuario.
-- Juego.
-- Puntaje.
-- Tiempo.
-- Si ganó o perdió.
-- Aciertos.
-- Errores.
-- Rondas jugadas.
-- Última elección.
-- Carta final.
+### Preguntados
 
-## Pantalla de juegos
+Juego de preguntas y respuestas basado en datos obtenidos desde una API externa.
 
-Se agregó una pantalla específica para listar los juegos disponibles.
+Características:
 
-Desde `/juegos` se puede acceder a:
+- Preguntas obtenidas desde Open Trivia DB.
+- Opciones múltiples.
+- Puntaje según respuestas correctas.
+- Penalización simple por tiempo.
+- Condición de victoria o derrota.
+- Resumen final en modal.
+- Guardado del resultado en Supabase.
 
-- Ahorcado Argentino.
+---
+
+### Sonido o Símbolo
+
+Juego propio desarrollado para este trabajo práctico.
+
+La idea del juego es reconocer elementos relacionados con Argentina a partir de una pista sonora y, si el jugador lo necesita, una ayuda visual.
+
+Características:
+
+- 5 rondas por partida.
+- Audio real por cada ronda.
+- El audio se reproduce durante un máximo de 5 segundos.
+- Respuesta escrita por el usuario.
+- Un solo intento por ronda.
+- Ayuda visual opcional mediante símbolo o imagen.
+- Si responde correctamente sin ayuda, obtiene 20 puntos.
+- Si usa ayuda visual y responde correctamente, obtiene 10 puntos.
+- Para ganar debe lograr al menos 3 respuestas correctas.
+- Guarda puntaje, tiempo, aciertos, errores y ayudas utilizadas.
+
+Ejemplos de elementos argentinos incluidos:
+
+- Mate.
+- Asado.
+- Truco.
+- Bandoneón.
+- Bombo legüero.
+- Hinchada.
+
+---
+
+## Resultados
+
+La pantalla de resultados muestra una tabla por cada juego:
+
+- Ahorcado.
 - Mayor o Menor.
-
-También se muestran juegos próximos:
-
 - Preguntados.
 - Sonido o Símbolo.
 
-Esta pantalla permite centralizar los accesos a los juegos actuales y futuros.
+Cada tabla muestra los mejores resultados, ordenados por mejor puntaje y menor tiempo.
 
-## Chat global
+Se decidió mostrar un Top 5 por juego para que la pantalla sea clara, simple y fácil de leer.
 
-Se implementó una sala de chat para usuarios autenticados.
+---
+
+## Chat
+
+La aplicación incluye un chat global para usuarios logueados.
 
 Características:
 
-- Listado de mensajes.
-- Envío de mensajes.
+- Mensajes visibles para todos los usuarios.
+- Envío de mensajes con botón o tecla Enter.
 - Identificación del usuario que envía cada mensaje.
-- Diferenciación visual entre mensajes propios y mensajes de otros usuarios.
-- Persistencia de mensajes en Supabase.
-- Actualización en tiempo real utilizando Supabase Realtime.
+- Diferenciación visual entre mensajes propios y ajenos.
+- Actualización en tiempo real mediante Supabase Realtime.
+- Limpieza de suscripción al salir del componente.
 
-Para que el chat funcione en tiempo real, la tabla `chat_messages` fue agregada a la publicación `supabase_realtime`.
+---
 
-## Base de datos
+## Quién soy
 
-Se utilizaron tablas en Supabase para guardar resultados y mensajes.
+La pantalla “Quién soy” muestra datos del alumno obtenidos desde GitHub.
 
-### Tabla `game_results`
+También incluye una explicación del juego propio, sus reglas, sistema de puntaje y forma de medir el desempeño del jugador.
 
-Guarda los resultados de los juegos.
+---
 
-Campos principales:
+## Not Found
 
-- `id`
-- `user_id`
-- `user_email`
-- `user_name`
-- `game`
-- `score`
-- `time_seconds`
-- `won`
-- `details`
-- `created_at`
+Se agregó una pantalla sencilla para rutas inexistentes.
 
-### Tabla `chat_messages`
+Desde esa pantalla el usuario puede:
 
-Guarda los mensajes del chat global.
+- Volver al inicio.
+- Ir a la sección de juegos.
 
-Campos principales:
+---
 
-- `id`
-- `user_id`
-- `user_email`
-- `user_name`
-- `message`
-- `created_at`
+## Estructura general del proyecto
 
-## Seguridad en Supabase
-
-Se activó Row Level Security en las tablas utilizadas.
-
-Políticas principales:
-
-- Los usuarios autenticados pueden insertar sus propios resultados.
-- Los usuarios autenticados pueden leer resultados.
-- Los usuarios autenticados pueden insertar sus propios mensajes.
-- Los usuarios autenticados pueden leer mensajes del chat.
-
-## Evolución por sprint
-
-### Sprint 1
-
-En el primer sprint se trabajó sobre la base del proyecto.
-
-Se incorporó:
-
-- Estructura inicial de la aplicación.
-- Navegación principal.
-- Pantalla Home.
-- Pantalla Quién soy.
-- Conexión con la API de GitHub para mostrar información del alumno.
-- Definición de la temática visual del proyecto.
-- Primer deploy.
-
-### Sprint 2
-
-En el segundo sprint se incorporó autenticación.
-
-Se incorporó:
-
-- Configuración de Supabase.
-- Registro de usuarios.
-- Inicio de sesión.
-- Cierre de sesión.
-- Manejo de sesión activa.
-- Guards de rutas.
-- Navegación condicional según sesión.
-- Ajustes visuales para login y registro.
-
-### Sprint 3
-
-En el tercer sprint se avanzó sobre la funcionalidad principal de la sala.
-
-Se incorporó:
-
-- Servicio de resultados de juegos.
-- Juego Ahorcado Argentino.
-- Guardado de resultados de Ahorcado.
-- Juego Mayor o Menor.
-- Guardado de resultados de Mayor o Menor.
-- Chat global.
-- Chat en tiempo real con Supabase Realtime.
-- Pantalla de listado de juegos.
-- Ajustes de navegación protegida.
-- Estética final de Sala Argentina.
-
-## Rutas principales
-
-| Ruta | Descripción | Acceso |
-|---|---|---|
-| `/home` | Pantalla principal | Público |
-| `/quien-soy` | Información del alumno | Público |
-| `/login` | Inicio de sesión | Público sin sesión |
-| `/register` | Registro de usuario | Público sin sesión |
-| `/juegos` | Listado de juegos | Protegido |
-| `/juegos/ahorcado` | Juego Ahorcado Argentino | Protegido |
-| `/juegos/mayor-menor` | Juego Mayor o Menor | Protegido |
-| `/chat` | Chat global | Protegido |
-| `/resultados` | Resultados / ranking | Protegido |
-
-## Instalación y ejecución local
-
-Clonar el repositorio:
-
-```bash
-git clone <url-del-repositorio>
+```txt
+src/
+├── app/
+│   ├── components/
+│   │   ├── ahorcado/
+│   │   ├── chat/
+│   │   ├── home/
+│   │   ├── juegos/
+│   │   ├── layout/
+│   │   ├── login/
+│   │   ├── mayor-menor/
+│   │   ├── not-found/
+│   │   ├── preguntados/
+│   │   ├── quien-soy/
+│   │   ├── register/
+│   │   ├── resultados/
+│   │   └── sonido-simbolo/
+│   │
+│   ├── guards/
+│   │   └── auth-guard
+│   │
+│   ├── services/
+│   │   ├── auth
+│   │   ├── chat
+│   │   ├── game-results
+│   │   ├── github
+│   │   ├── questions
+│   │   └── supabase
+│   │
+│   ├── app.routes.ts
+│   └── app.config.ts
+│
+└── public/
+    ├── assets/
+    │   ├── images/
+    │   └── sounds/
+    └── escarapela.ico
