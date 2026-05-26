@@ -29,23 +29,27 @@ export class Register implements OnInit {
   async register(): Promise<void> {
     this.authService.error.set(null);
 
-    if (!this.nombre.trim()) {
+    const nombre = this.nombre.trim();
+    const apellido = this.apellido.trim();
+    const email = this.email.trim();
+
+    if (!nombre) {
       this.authService.error.set('Ingresá tu nombre.');
       return;
     }
 
-    if (!this.apellido.trim()) {
+    if (!apellido) {
       this.authService.error.set('Ingresá tu apellido.');
-      return;
-    }
-
-    if (!this.email.trim()) {
-      this.authService.error.set('Ingresá tu correo electrónico.');
       return;
     }
 
     if (!this.edad || this.edad <= 0 || this.edad > 100) {
       this.authService.error.set('Ingresá una edad válida.');
+      return;
+    }
+
+    if (!email) {
+      this.authService.error.set('Ingresá tu correo electrónico.');
       return;
     }
 
@@ -55,10 +59,10 @@ export class Register implements OnInit {
     }
 
     const success = await this.authService.register({
-      email: this.email.trim(),
+      email,
       password: this.password,
-      nombre: this.nombre.trim(),
-      apellido: this.apellido.trim(),
+      nombre,
+      apellido,
       edad: this.edad,
     });
 

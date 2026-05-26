@@ -1,5 +1,15 @@
 import { CommonModule } from '@angular/common';
-import { Component, NgZone, OnDestroy, OnInit, computed, inject, signal } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  NgZone,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+  computed,
+  inject,
+  signal,
+} from '@angular/core';
 import { AuthService } from '../../services/auth';
 import { ChatMessage, ChatService } from '../../services/chat';
 
@@ -10,6 +20,8 @@ import { ChatMessage, ChatService } from '../../services/chat';
   styleUrl: './chat.css',
 })
 export class Chat implements OnInit, OnDestroy {
+  @ViewChild('messagesContainer') private messagesContainer?: ElementRef<HTMLDivElement>;
+
   private authService = inject(AuthService);
   private chatService = inject(ChatService);
   private ngZone = inject(NgZone);
@@ -31,7 +43,7 @@ export class Chat implements OnInit, OnDestroy {
         this.ngZone.run(() => {
           this.messages.update((messages) => {
             const messageAlreadyExists = messages.some(
-              (currentMessage) => currentMessage.id === message.id
+              (currentMessage) => currentMessage.id === message.id,
             );
 
             if (messageAlreadyExists) {
@@ -40,13 +52,15 @@ export class Chat implements OnInit, OnDestroy {
 
             return [...messages, message];
           });
+
+          this.scrollToBottom();
         });
       },
       (status) => {
         this.ngZone.run(() => {
           this.realtimeStatus.set(`Realtime: ${status}`);
         });
-      }
+      },
     );
   }
 
@@ -62,6 +76,7 @@ export class Chat implements OnInit, OnDestroy {
 
     this.messages.set(messages);
     this.loading.set(false);
+    this.scrollToBottom();
   }
 
   async sendMessage(): Promise<void> {
@@ -90,6 +105,7 @@ export class Chat implements OnInit, OnDestroy {
     }
 
     this.messageText.set('');
+    this.scrollToBottom();
   }
 
   updateMessageText(event: Event): void {
@@ -109,6 +125,18 @@ export class Chat implements OnInit, OnDestroy {
     return new Date(date).toLocaleTimeString('es-AR', {
       hour: '2-digit',
       minute: '2-digit',
+    });
+  }
+
+  private scrollToBottom(): void {
+    setTimeout(() => {
+      const container = this.messagesContainer?.nativeElement;
+
+      if (!container) {
+        return;
+      }
+
+      container.scrollTop = container.scrollHeight;
     });
   }
 }

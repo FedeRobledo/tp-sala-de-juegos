@@ -1,15 +1,16 @@
 <section class="auth-page">
   <article class="auth-card">
     <div class="auth-header">
-      <span class="auth-icon">🕹️</span>
       <p class="eyebrow">Nuevo jugador</p>
+
       <h2>Crear cuenta</h2>
+
       <p>
-        Registrate para ingresar a la Sala de Juegos y guardar tu progreso.
+        Registrate para ingresar a la Sala Argentina de Juegos y guardar tu progreso.
       </p>
     </div>
 
-    <form class="auth-form" (ngSubmit)="register()">
+    <form class="auth-form" (ngSubmit)="register()" novalidate>
       <div class="form-row">
         <label>
           Nombre
@@ -19,6 +20,7 @@
             [(ngModel)]="nombre"
             placeholder="Federico"
             autocomplete="given-name"
+            [disabled]="loading()"
           />
         </label>
 
@@ -30,6 +32,7 @@
             [(ngModel)]="apellido"
             placeholder="Robledo"
             autocomplete="family-name"
+            [disabled]="loading()"
           />
         </label>
       </div>
@@ -42,6 +45,8 @@
           [(ngModel)]="edad"
           placeholder="25"
           min="1"
+          max="100"
+          [disabled]="loading()"
         />
       </label>
 
@@ -53,6 +58,7 @@
           [(ngModel)]="email"
           placeholder="tu-email@ejemplo.com"
           autocomplete="email"
+          [disabled]="loading()"
         />
       </label>
 
@@ -64,6 +70,7 @@
           [(ngModel)]="password"
           placeholder="Mínimo 6 caracteres"
           autocomplete="new-password"
+          [disabled]="loading()"
         />
       </label>
 

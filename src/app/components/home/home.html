@@ -8,27 +8,39 @@
       <h2>Elegí tu <span>desafío</span></h2>
 
       <p>
-        Jugá minijuegos con identidad argentina, guardá tus puntajes y seguí mejorando en cada partida.
+        Jugá minijuegos con identidad argentina, guardá tus puntajes y seguí mejorando
+        en cada partida.
       </p>
 
       <div class="center-actions">
-        <a routerLink="/juegos" class="play-button">Ver juegos disponibles</a>
+        <a routerLink="/juegos" class="play-button">Ver juegos</a>
+        <a routerLink="/resultados" class="play-button secondary">Resultados</a>
       </div>
     } @else {
       <h2>Entrá a la <span>Sala</span></h2>
 
       <p>
-        Iniciá sesión para acceder a los juegos, guardar resultados y participar del chat.
+        Iniciá sesión o registrate para acceder a los juegos, guardar resultados y
+        participar de la sala.
       </p>
 
       <div class="center-actions">
         <a routerLink="/login" class="play-button">Iniciar sesión</a>
+        <a routerLink="/register" class="play-button secondary">Registrarme</a>
       </div>
     }
   </section>
 
-  <a routerLink="/juegos/ahorcado" class="game-node game-north-west">
-    <span class="game-tag">Disponible</span>
+  <a
+    class="game-node game-north-west"
+    [class.locked]="!authService.isLoggedIn()"
+    [routerLink]="authService.isLoggedIn() ? '/juegos/ahorcado' : null"
+    [attr.aria-disabled]="!authService.isLoggedIn()"
+    [attr.tabindex]="authService.isLoggedIn() ? null : -1"
+  >
+    <span class="game-tag">
+      {{ authService.isLoggedIn() ? 'Disponible' : 'Bloqueado' }}
+    </span>
 
     <div class="preview preview-hangman">
       <span class="gallows gallows-a"></span>
@@ -44,11 +56,21 @@
     </div>
 
     <div class="node-title">Ahorcado Argentino</div>
-    <div class="node-footer">Presioná y jugá</div>
+    <div class="node-footer">
+      {{ authService.isLoggedIn() ? 'Presioná y jugá' : 'Iniciá sesión' }}
+    </div>
   </a>
 
-  <a routerLink="/juegos/mayor-menor" class="game-node game-north-east">
-    <span class="game-tag">Disponible</span>
+  <a
+    class="game-node game-north-east"
+    [class.locked]="!authService.isLoggedIn()"
+    [routerLink]="authService.isLoggedIn() ? '/juegos/mayor-menor' : null"
+    [attr.aria-disabled]="!authService.isLoggedIn()"
+    [attr.tabindex]="authService.isLoggedIn() ? null : -1"
+  >
+    <span class="game-tag">
+      {{ authService.isLoggedIn() ? 'Disponible' : 'Bloqueado' }}
+    </span>
 
     <div class="preview preview-cards">
       <div class="spanish-card card-left">
@@ -65,14 +87,24 @@
     </div>
 
     <div class="node-title">Mayor o Menor</div>
-    <div class="node-footer">Presioná y jugá</div>
+    <div class="node-footer">
+      {{ authService.isLoggedIn() ? 'Presioná y jugá' : 'Iniciá sesión' }}
+    </div>
   </a>
 
-  <a routerLink="/juegos" class="game-node game-south-west locked">
-    <span class="game-tag">Próximamente</span>
+  <a
+    class="game-node game-south-west"
+    [class.locked]="!authService.isLoggedIn()"
+    [routerLink]="authService.isLoggedIn() ? '/juegos/preguntados' : null"
+    [attr.aria-disabled]="!authService.isLoggedIn()"
+    [attr.tabindex]="authService.isLoggedIn() ? null : -1"
+  >
+    <span class="game-tag">
+      {{ authService.isLoggedIn() ? 'Disponible' : 'Bloqueado' }}
+    </span>
 
     <div class="preview preview-quiz">
-      <div class="mini-question">¿Capital de La Pampa?</div>
+      <div class="mini-question">¿Pregunta?</div>
 
       <div class="mini-options">
         <span>A</span>
@@ -83,39 +115,64 @@
     </div>
 
     <div class="node-title">Preguntados</div>
-    <div class="node-footer">Próximamente</div>
+    <div class="node-footer">
+      {{ authService.isLoggedIn() ? 'Presioná y jugá' : 'Iniciá sesión' }}
+    </div>
   </a>
 
-  <a routerLink="/juegos" class="game-node game-south-east locked">
-    <span class="game-tag">Próximamente</span>
+  <a
+    class="game-node game-south-east"
+    [class.locked]="!authService.isLoggedIn()"
+    [routerLink]="authService.isLoggedIn() ? '/juegos/sonido-simbolo' : null"
+    [attr.aria-disabled]="!authService.isLoggedIn()"
+    [attr.tabindex]="authService.isLoggedIn() ? null : -1"
+  >
+    <span class="game-tag">
+      {{ authService.isLoggedIn() ? 'Disponible' : 'Bloqueado' }}
+    </span>
 
     <div class="preview preview-mystery">
       <div class="mystery-mark">?</div>
-      <p>Próximo</p>
+      <p>Sonido o símbolo</p>
     </div>
 
     <div class="node-title">Sonido o Símbolo</div>
-    <div class="node-footer">Próximamente</div>
+    <div class="node-footer">
+      {{ authService.isLoggedIn() ? 'Presioná y jugá' : 'Iniciá sesión' }}
+    </div>
   </a>
 
-  <a routerLink="/resultados" class="ranking-panel">
-    <h3 class="panel-title">Mejores puntajes</h3>
+  <a
+    class="ranking-panel"
+    [class.locked]="!authService.isLoggedIn()"
+    [routerLink]="authService.isLoggedIn() ? '/resultados' : null"
+    [attr.aria-disabled]="!authService.isLoggedIn()"
+    [attr.tabindex]="authService.isLoggedIn() ? null : -1"
+  >
+    <h3 class="panel-title">Resultados</h3>
 
     <div class="result-line">
       <span>Ahorcado</span>
-      <strong>Próximamente</strong>
+      <strong>Tabla</strong>
     </div>
 
     <div class="result-line">
       <span>Mayor o Menor</span>
-      <strong>Próximamente</strong>
+      <strong>Tabla</strong>
     </div>
 
     <div class="result-line">
-      <span>Ranking general</span>
-      <strong>Próximamente</strong>
+      <span>Preguntados</span>
+      <strong>Tabla</strong>
     </div>
 
-    <div class="panel-footer">Ver resultados</div>
+    <div class="result-line">
+      <span>Sonido o Símbolo</span>
+      <strong>Tabla</strong>
+    </div>
+
+    <div class="panel-footer">
+      {{ authService.isLoggedIn() ? 'Ver resultados' : 'Iniciá sesión' }}
+    </div>
   </a>
 </section>

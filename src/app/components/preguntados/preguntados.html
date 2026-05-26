@@ -1,0 +1,157 @@
+<section class="trivia-page">
+  <header class="trivia-header">
+    <div>
+      <p class="section-kicker">Juego actual</p>
+      <h2>Preguntados</h2>
+      <p>
+        Respondé preguntas obtenidas desde una API externa. Elegí una opción por ronda,
+        sumá puntos por cada acierto y completá la partida con la mayor cantidad de respuestas correctas.
+      </p>
+    </div>
+
+    <div class="score-card">
+      <span>Puntaje actual</span>
+      <strong>{{ score() }}</strong>
+    </div>
+  </header>
+
+  @if (loading()) {
+    <section class="state-card">
+      <p class="section-kicker">Cargando</p>
+      <h3>Cargando preguntas...</h3>
+      <p>Estamos preparando una partida nueva con preguntas desde la API.</p>
+    </section>
+  } @else if (errorMessage()) {
+    <section class="state-card error-state">
+      <p class="section-kicker">Error</p>
+      <h3>No se pudo iniciar la partida</h3>
+      <p>{{ errorMessage() }}</p>
+
+      <button type="button" class="main-button" (click)="restartGame()">
+        Intentar nuevamente
+      </button>
+    </section>
+  } @else if (finished() && !showResultModal()) {
+    <section class="state-card finished-state">
+      <p class="section-kicker">Partida finalizada</p>
+      <h3>{{ won() ? 'Victoria' : 'Derrota' }}</h3>
+      <p>
+        La partida terminó con {{ correctAnswers() }} respuestas correctas,
+        {{ wrongAnswers() }} incorrectas y un puntaje final de {{ score() }}.
+      </p>
+
+      <div class="finished-actions">
+        <button type="button" class="secondary-button" (click)="openResultModal()">
+          Ver resumen
+        </button>
+
+        <button type="button" class="primary-button" (click)="restartGame()">
+          Jugar otra vez
+        </button>
+      </div>
+    </section>
+  } @else if (currentQuestion(); as question) {
+    <section class="game-panel">
+      <div class="game-status">
+        <span>Pregunta {{ currentQuestionNumber() }} de {{ totalQuestions() }}</span>
+        <span>{{ elapsedSeconds() }} s</span>
+      </div>
+
+      <div class="question-card">
+        <div class="question-meta">
+          <span>{{ question.category }}</span>
+          <span>{{ question.difficulty }}</span>
+        </div>
+
+        <h3>{{ question.question }}</h3>
+      </div>
+
+      <div class="options-grid">
+        @for (option of question.options; track option) {
+          <button
+            type="button"
+            class="option-button"
+            [ngClass]="getOptionClass(option)"
+            [disabled]="selectedOption() !== null"
+            (click)="selectOption(option)"
+          >
+            {{ option }}
+          </button>
+        }
+      </div>
+
+      <div class="live-summary">
+        <div>
+          <span>Correctas</span>
+          <strong>{{ correctAnswers() }}</strong>
+        </div>
+
+        <div>
+          <span>Incorrectas</span>
+          <strong>{{ wrongAnswers() }}</strong>
+        </div>
+
+        <div>
+          <span>Tiempo</span>
+          <strong>{{ elapsedSeconds() }} s</strong>
+        </div>
+
+        <div>
+          <span>Puntaje</span>
+          <strong>{{ score() }}</strong>
+        </div>
+      </div>
+    </section>
+  }
+
+  @if (finished() && showResultModal()) {
+    <div class="modal-backdrop">
+      <section class="result-modal" [class.win]="won()" [class.lose]="!won()">
+        <p class="modal-kicker">{{ won() ? 'Victoria' : 'Derrota' }}</p>
+
+        <h3>
+          {{ won() ? '¡Buen resultado!' : 'Partida terminada' }}
+        </h3>
+
+        @if (won()) {
+          <p class="modal-text">
+            Superaste la partida respondiendo correctamente la mayoría de las preguntas.
+          </p>
+        } @else {
+          <p class="modal-text">
+            No alcanzaste la cantidad necesaria de respuestas correctas. Podés volver a intentarlo.
+          </p>
+        }
+
+        <div class="modal-stats">
+          <span>Correctas: {{ correctAnswers() }}</span>
+          <span>Incorrectas: {{ wrongAnswers() }}</span>
+          <span>Tiempo: {{ elapsedSeconds() }} s</span>
+          <span>Puntaje: {{ score() }}</span>
+        </div>
+
+        @if (savingResult()) {
+          <p class="save-status">Guardando resultado...</p>
+        }
+
+        @if (resultSaved()) {
+          <p class="save-status success">Resultado guardado correctamente.</p>
+        }
+
+        @if (saveResultError()) {
+          <p class="save-status error">{{ saveResultError() }}</p>
+        }
+
+        <div class="modal-actions">
+          <button type="button" class="secondary-button" (click)="closeResultModal()">
+            Cerrar
+          </button>
+
+          <button type="button" class="primary-button" (click)="restartGame()">
+            Jugar otra vez
+          </button>
+        </div>
+      </section>
+    </div>
+  }
+</section>

@@ -1,15 +1,16 @@
 <section class="auth-page">
   <article class="auth-card">
     <div class="auth-header">
-      <span class="auth-icon">🎮</span>
-      <p class="eyebrow">Acceso de jugador</p>
+      <p class="eyebrow">Acceso al jugador</p>
+
       <h2>Iniciar sesión</h2>
+
       <p>
-        Ingresá con tu correo y contraseña para acceder a la Sala de Juegos.
+        Ingresá con tu correo y contraseña para acceder a la Sala Argentina de Juegos.
       </p>
     </div>
 
-    <form class="auth-form" (ngSubmit)="login()">
+    <form class="auth-form" (ngSubmit)="login()" novalidate>
       <label>
         Correo electrónico
         <input
@@ -18,6 +19,7 @@
           [(ngModel)]="email"
           placeholder="tu-email@ejemplo.com"
           autocomplete="email"
+          [disabled]="loading()"
         />
       </label>
 
@@ -29,6 +31,7 @@
           [(ngModel)]="password"
           placeholder="Ingresá tu contraseña"
           autocomplete="current-password"
+          [disabled]="loading()"
         />
       </label>
 

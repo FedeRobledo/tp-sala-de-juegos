@@ -1,7 +1,7 @@
 import { Injectable, inject } from '@angular/core';
 import { SupabaseService } from './supabase';
 
-export type GameName = 'ahorcado' | 'mayor-menor' | 'preguntados' | 'juego-propio';
+export type GameName = 'ahorcado' | 'mayor-menor' | 'preguntados' | 'sonido-simbolo';
 
 export interface GameResult {
   id?: string;
@@ -54,13 +54,19 @@ export class GameResultsService {
     return true;
   }
 
-  async getResultsByGame(game: GameName): Promise<GameResult[]> {
-    const { data, error } = await this.supabase
+  async getResultsByGame(game: GameName, limit?: number): Promise<GameResult[]> {
+    let query = this.supabase
       .from('game_results')
       .select('*')
       .eq('game', game)
       .order('score', { ascending: false })
       .order('time_seconds', { ascending: true });
+
+    if (limit) {
+      query = query.limit(limit);
+    }
+
+    const { data, error } = await query;
 
     if (error) {
       console.error('Error al obtener resultados del juego:', error.message);

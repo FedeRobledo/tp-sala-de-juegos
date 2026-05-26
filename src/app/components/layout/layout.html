@@ -1,9 +1,9 @@
 <div class="game-layout">
   <header class="top-island">
     <a routerLink="/home" class="brand" aria-label="Ir al inicio">
-    <div class="brand-logo-wrap">
-      <img src="/escarapela.ico" alt="Escarapela argentina" class="brand-logo" />
-    </div>
+      <div class="brand-logo-wrap">
+        <img src="/escarapela.ico" alt="Escarapela argentina" class="brand-logo" />
+      </div>
 
       <div>
         <h1>Sala <span>Argentina</span></h1>
@@ -16,7 +16,15 @@
         <a
           [routerLink]="item.route"
           routerLinkActive="active"
-          [routerLinkActiveOptions]="{ exact: item.route === '/home' || item.route === '/juegos' }"
+          [routerLinkActiveOptions]="{
+            exact:
+              item.route === '/home' ||
+              item.route === '/login' ||
+              item.route === '/register' ||
+              item.route === '/juegos' ||
+              item.route === '/resultados' ||
+              item.route === '/quien-soy'
+          }"
         >
           {{ item.label }}
         </a>
@@ -36,7 +44,7 @@
 
         <button
           type="button"
-          class="exit-btn"
+          class="nav-action"
           [disabled]="authService.loading()"
           (click)="logout()"
         >
@@ -49,8 +57,6 @@
           <strong>Invitado</strong>
           <span>Iniciá sesión para jugar</span>
         </div>
-
-        <a routerLink="/login" class="exit-btn login-btn">Entrar</a>
       }
     </div>
   </header>
